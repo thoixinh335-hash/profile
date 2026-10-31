@@ -6,17 +6,20 @@ import { globalAudio } from "@/lib/audio-state";
 
 export function AmbientAudio() {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [trackTitle, setTrackTitle] = useState("edamame");
 
   useEffect(() => {
     return globalAudio.subscribe((playing) => {
       setIsPlaying(playing);
+      const track = globalAudio.getCurrentTrack();
+      if (track) setTrackTitle(track.title);
     });
   }, []);
 
   return (
     <button
       onClick={() => globalAudio.toggle()}
-      title={isPlaying ? "Mute ambient audio (2 AM Debug Loop)" : "Play ambient audio (Lofi Chill)"}
+      title={isPlaying ? `Mute music (${trackTitle})` : `Play music (${trackTitle})`}
       aria-label="Toggle ambient sound"
       className="fixed bottom-4 right-4 sm:bottom-auto sm:top-5 sm:right-6 z-50 flex items-center justify-center size-9 rounded-full bg-black/60 border border-white/[0.1] backdrop-blur-md text-white/70 hover:text-white hover:border-white/25 hover:scale-105 active:scale-95 transition-all shadow-[0_4px_20px_rgba(0,0,0,0.5)] group"
     >

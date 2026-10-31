@@ -45,18 +45,18 @@ export function EnterScreen({ onEnter }: EnterScreenProps) {
     if (hasTriggeredRef.current) return;
     hasTriggeredRef.current = true;
 
-    // 1. Play tactile feedback + start ambient music
+    // 1. Audio & haptics
     playHapticBlip();
     globalAudio.play();
 
-    // 2. Trigger eye opening animation
+    // 2. Trigger sleek curtain split reveal
     setIsExiting(true);
     onEnter?.();
 
-    // 3. Complete dismiss after eye fully opens
+    // 3. Complete dismiss after smooth slide finishes
     setTimeout(() => {
       setIsDismissed(true);
-    }, 1250);
+    }, 650);
   }, [onEnter]);
 
   useEffect(() => {
@@ -80,78 +80,31 @@ export function EnterScreen({ onEnter }: EnterScreenProps) {
       aria-label="Click anywhere to enter profile"
       className="fixed inset-0 z-[100] flex items-center justify-center cursor-pointer select-none overflow-hidden"
     >
-      {/* ================= UPPER EYELID FLAP (MÍ MẮT TRÊN) ================= */}
+      {/* ================= UPPER CURTAIN FLAP (TRÊN) ================= */}
       <div
-        className={`fixed top-0 inset-x-0 w-full h-[75%] pointer-events-none z-20 ${
-          isExiting ? "animate-eyelid-top" : "translate-y-0"
+        className={`fixed top-0 inset-x-0 w-full h-[50.5%] bg-[#08090a] z-20 pointer-events-none transition-transform duration-600 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          isExiting ? "-translate-y-full" : "translate-y-0"
         }`}
-      >
-        <svg
-          viewBox="0 0 1000 750"
-          preserveAspectRatio="none"
-          className="w-full h-full"
-        >
-          {/* Solid Eyelid Fill */}
-          <path
-            d="M -50 -50 L 1050 -50 L 1050 750 Q 500 500 -50 750 Z"
-            fill="#08090a"
-          />
-          {/* Glowing Upper Eyelash Rim */}
-          <path
-            d="M -50 750 Q 500 500 1050 750"
-            fill="none"
-            stroke="rgba(99,102,241,0.6)"
-            strokeWidth="3.5"
-            className={`transition-opacity duration-300 ${
-              isExiting ? "opacity-100" : "opacity-0"
-            }`}
-            filter="drop-shadow(0 0 10px rgba(99,102,241,0.75))"
-          />
-        </svg>
-      </div>
+      />
 
-      {/* ================= LOWER EYELID FLAP (MÍ MẮT DƯỚI) ================= */}
+      {/* ================= LOWER CURTAIN FLAP (DƯỚI) ================= */}
       <div
-        className={`fixed bottom-0 inset-x-0 w-full h-[75%] pointer-events-none z-20 ${
-          isExiting ? "animate-eyelid-bottom" : "translate-y-0"
+        className={`fixed bottom-0 inset-x-0 w-full h-[50.5%] bg-[#08090a] z-20 pointer-events-none transition-transform duration-600 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          isExiting ? "translate-y-full" : "translate-y-0"
         }`}
-      >
-        <svg
-          viewBox="0 0 1000 750"
-          preserveAspectRatio="none"
-          className="w-full h-full"
-        >
-          {/* Solid Eyelid Fill */}
-          <path
-            d="M -50 800 L 1050 800 L 1050 0 Q 500 250 -50 0 Z"
-            fill="#08090a"
-          />
-          {/* Glowing Lower Eyelash Rim */}
-          <path
-            d="M -50 0 Q 500 250 1050 0"
-            fill="none"
-            stroke="rgba(6,182,212,0.6)"
-            strokeWidth="3.5"
-            className={`transition-opacity duration-300 ${
-              isExiting ? "opacity-100" : "opacity-0"
-            }`}
-            filter="drop-shadow(0 0 10px rgba(6,182,212,0.75))"
-          />
-        </svg>
-      </div>
+      />
 
-      {/* ================= CENTER IDLE HUD (FADES OUT INSTANTLY ON EYE OPEN) ================= */}
+      {/* ================= CENTER IDLE HUD (FADES OUT INSTANTLY) ================= */}
       <div
         className={`relative z-30 flex flex-col items-center text-center px-4 transition-all duration-200 ease-out ${
           isExiting
-            ? "opacity-0 scale-95 blur-sm pointer-events-none"
-            : "opacity-100 scale-100 blur-0"
+            ? "opacity-0 scale-95 pointer-events-none"
+            : "opacity-100 scale-100"
         }`}
       >
-        {/* Glowing Profile Avatar */}
+        {/* Clean Avatar without harsh colored rim */}
         <div className="relative mb-4 flex items-center justify-center">
-          <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-indigo-500/25 to-cyan-500/25 blur-md animate-pulse" />
-          <div className="relative size-18 sm:size-20 rounded-full overflow-hidden border border-white/15 bg-black shadow-[0_0_30px_rgba(94,106,210,0.35)] ring-1 ring-white/10 transition-transform duration-300 hover:scale-105">
+          <div className="relative size-18 sm:size-20 rounded-full overflow-hidden border border-white/10 bg-[#121215] shadow-[0_4px_24px_rgba(0,0,0,0.8)] transition-transform duration-300 hover:scale-105">
             <Image
               src="https://avatars.githubusercontent.com/u/264090890?v=4"
               alt="darkwy avatar"
@@ -184,13 +137,6 @@ export function EnterScreen({ onEnter }: EnterScreenProps) {
           press Enter or click anywhere
         </span>
       </div>
-
-      {/* Iris Pupil Light Flare as Eye Opens */}
-      {isExiting && (
-        <div className="fixed inset-0 z-10 pointer-events-none flex items-center justify-center animate-out fade-out duration-700">
-          <div className="size-64 rounded-full bg-gradient-to-r from-indigo-500/25 via-cyan-500/20 to-transparent blur-3xl scale-150 transition-transform duration-700" />
-        </div>
-      )}
     </div>
   );
 }

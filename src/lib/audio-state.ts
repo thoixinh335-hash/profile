@@ -1,10 +1,14 @@
 "use client";
 
-type Listener = (isPlaying: boolean) => void;
+import { PLAYLIST, type Track } from "@/data/playlist";
+
+type Listener = (isPlaying: boolean, trackIndex: number) => void;
 
 class AudioState {
   private audio: HTMLAudioElement | null = null;
   private isPlaying = false;
+  private isLoopPlaylist = true;
+  private currentTrackIndex = 0;
   private listeners = new Set<Listener>();
 
   constructor() {
@@ -15,8 +19,9 @@ class AudioState {
 
   private init() {
     if (this.audio) return;
-    this.audio = new Audio("/audio/ambient.mp3");
-    this.audio.loop = true;
+    const initialTrack = PLAYLIST[this.currentTrackIndex];
+    this.audio = new Audio(initialTrack ? initialTrack.audioSrc : "/audio/ambient.mp3");
+    this.audio.loop = false; // We manage loop transitions programmatically
     this.audio.volume = 0.25;
 
     this.audio.addEventListener("play", () => {
@@ -29,9 +34,14 @@ class AudioState {
       this.notify();
     });
 
+    // Auto-advance to next track in playlist loop when song ends
     this.audio.addEventListener("ended", () => {
-      this.isPlaying = false;
-      this.notify();
+      if (this.isLoopPlaylist) {
+        this.nextTrack(true);
+      } else {
+        this.isPlaying = false;
+        this.notify();
+      }
     });
   }
 
@@ -46,29 +56,35 @@ class AudioState {
     return this.isPlaying;
   }
 
+  public getCurrentTrackIndex(): number {
+    return this.currentTrackIndex;
+  }
+
+  public getCurrentTrack(): Track {
+    return PLAYLIST[this.currentTrackIndex] || PLAYLIST[0];
+  }
+
   public subscribe(listener: Listener): () => void {
     this.listeners.add(listener);
-    listener(this.isPlaying);
+    listener(this.isPlaying, this.currentTrackIndex);
     return () => {
       this.listeners.delete(listener);
     };
   }
 
   private notify() {
-    this.listeners.forEach((fn) => fn(this.isPlaying));
+    this.listeners.forEach((fn) => fn(this.isPlaying, this.currentTrackIndex));
   }
 
   public async play(): Promise<boolean> {
     const audio = this.getAudio();
     if (!audio) return false;
     try {
-      // Fade in smoothly from 0 to 0.25
       audio.volume = 0.05;
       await audio.play();
       this.isPlaying = true;
       this.notify();
 
-      // Smooth volume ramp
       let currentVol = 0.05;
       const targetVol = 0.25;
       const interval = setInterval(() => {
@@ -106,7 +122,56 @@ class AudioState {
       this.play();
     }
   }
+
+  public setTrack(index: number, autoPlay = true) {
+    const nextIdx = (index + PLAYLIST.length) % PLAYLIST.length;
+    this.currentTrackIndex = nextIdx;
+    const track = PLAYLIST[nextIdx];
+    const audio = this.getAudio();
+    if (audio && track) {
+      audio.pause();
+      audio.src = track.audioSrc;
+      audio.currentTime = 0;
+      this.notify();
+      if (autoPlay || this.isPlaying) {
+        this.play();
+      }
+    }
+  }
+
+  public nextTrack(autoPlay = true) {
+    this.setTrack(this.currentTrackIndex + 1, autoPlay);
+  }
+
+  public prevTrack(autoPlay = true) {
+    const audio = this.getAudio();
+    if (audio && audio.currentTime > 3) {
+      audio.currentTime = 0;
+      if (autoPlay || this.isPlaying) {
+        this.play();
+      }
+      return;
+    }
+    this.setTrack(this.currentTrackIndex - 1, autoPlay);
+  }
+
+  public setLoopPlaylist(loop: boolean) {
+    this.isLoopPlaylist = loop;
+    this.notify();
+  }
+
+  public getIsLoopPlaylist(): boolean {
+    return this.isLoopPlaylist;
+  }
+
+  // Backward compatibility alias
+  public setLoop(loop: boolean) {
+    this.setLoopPlaylist(loop);
+  }
+
+  public getIsLooping(): boolean {
+    return this.getIsLoopPlaylist();
+  }
 }
 
 export const globalAudio = new AudioState();
-

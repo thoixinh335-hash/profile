@@ -255,35 +255,6 @@ button, a, input, [role="button"] {
   background: rgba(255, 255, 255, 0.35);
 }
 
-/* =========================================================================
-   EYELID OPENING ANIMATION (CON MẮT MỞ RA EFFECT)
-   ========================================================================= */
-@keyframes eyelid-top-open {
-  0% {
-    transform: translateY(0);
-  }
-  100% {
-    transform: translateY(-105%);
-  }
-}
-
-@keyframes eyelid-bottom-open {
-  0% {
-    transform: translateY(0);
-  }
-  100% {
-    transform: translateY(105%);
-  }
-}
-
-.animate-eyelid-top {
-  animation: eyelid-top-open 1200ms cubic-bezier(0.25, 0.1, 0.25, 1) forwards !important;
-}
-
-.animate-eyelid-bottom {
-  animation: eyelid-bottom-open 1200ms cubic-bezier(0.25, 0.1, 0.25, 1) forwards !important;
-}
-
 @layer base {
   * {
     border-color: rgba(255, 255, 255, 0.08);
