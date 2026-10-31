@@ -20,43 +20,43 @@ import {
 const MILESTONES = [
   {
     step: "01",
-    phase: "Khởi Đầu",
-    title: "Bắt Đầu Với Arduino & VS Code",
+    phase: "Genesis",
+    title: "Starting with Arduino & VS Code",
     dotColor: "bg-cyan-400 shadow-[0_0_8px_rgba(6,182,212,0.8)]",
     badgeColor: "border-cyan-500/30 bg-cyan-500/10 text-cyan-300",
     description:
-      "Khởi đầu với sự say mê phần cứng Arduino & vi điều khiển, làm quen với text editor VS Code, viết những dòng lệnh C/C++ và HTML/CSS/JS đầu tiên, rèn luyện tư duy logic thuật toán.",
-    tags: ["Arduino (C/C++)", "VS Code", "HTML/CSS/JS", "Tư Duy Logic"],
+      "Sparked by passion for Arduino hardware & microcontrollers, mastering VS Code, writing early C/C++ and foundational HTML/CSS/JS algorithms.",
+    tags: ["Arduino (C/C++)", "VS Code", "HTML/CSS/JS", "Algorithmic Logic"],
   },
   {
     step: "02",
-    phase: "Làm Chủ Nền Tảng",
-    title: "Thông Thạo Thiết Kế Với PHP & MySQL",
+    phase: "Core Mastery",
+    title: "Full-Stack Web with PHP & MySQL",
     dotColor: "bg-indigo-400 shadow-[0_0_8px_rgba(99,102,241,0.8)]",
     badgeColor: "border-indigo-500/30 bg-indigo-500/10 text-indigo-300",
     description:
-      "Nắm vững thiết kế giao diện UI/UX trực quan trên VS Code, phát triển web động chuyên sâu với PHP, tối ưu cơ sở dữ liệu quan hệ MySQL và hoàn thiện các website thực tế từ frontend đến database.",
-    tags: ["PHP", "MySQL", "Thiết Kế UI/UX", "Web Động", "Database Schema"],
+      "Architecting clean UI/UX interfaces on VS Code, building robust dynamic web platforms with PHP, optimizing relational MySQL schemas, and shipping end-to-end production web apps.",
+    tags: ["PHP", "MySQL", "UI/UX Design", "Dynamic Web", "Database Schema"],
   },
   {
     step: "03",
-    phase: "Mở Rộng Quy Mô",
-    title: "Chuyển Dịch Next.js & Go Backend",
+    phase: "Scaling Up",
+    title: "Transition to Next.js & Go Backend",
     dotColor: "bg-emerald-400 shadow-[0_0_8px_rgba(16,185,129,0.8)]",
     badgeColor: "border-emerald-500/30 bg-emerald-500/10 text-emerald-300",
     description:
-      "Nâng cấp stack lên hệ sinh thái hiện đại: React/Next.js (App Router, Turbopack), Go Fiber hiệu năng cao, Redis in-memory cache, WebSocket và tự động hóa thanh toán ngân hàng.",
+      "Modernizing the stack: React/Next.js (App Router, Turbopack), ultra-low latency Go Fiber backends, Redis in-memory caching, real-time WebSockets, and automated bank payment gateways.",
     tags: ["Next.js 16", "React 19", "Go Fiber", "Redis", "TypeScript"],
   },
   {
     step: "04",
-    phase: "Bứt Phá Hiện Tại",
-    title: "AI Bùng Nổ • Năng Suất & Hiệu Quả Đột Phá",
+    phase: "Modern Frontier",
+    title: "AI Explosion • 10x Productivity & Agentic Workflows",
     dotColor: "bg-purple-400 shadow-[0_0_10px_rgba(168,85,247,0.9)]",
     badgeColor: "border-purple-500/40 bg-purple-500/15 text-purple-200",
     description:
-      "Tận dụng sức mạnh đột phá của các mô hình AI tiên tiến, tích hợp Agentic Coding Workflows vào VS Code. Tối ưu hóa chu trình phát triển, nhân bản năng suất x10 và hoàn thiện các giải pháp web phức tạp với tốc độ vượt bậc.",
-    tags: ["Agentic AI", "Năng Suất x10", "VS Code Copilot/Agents", "Tối Ưu Hiệu Quả"],
+      "Harnessing next-gen frontier AI models and agentic coding workflows in VS Code. Accelerating delivery cycles, multiplying engineering output 10x, and building complex web architectures with extreme velocity.",
+    tags: ["Agentic AI", "10x Productivity", "VS Code Agents", "High Velocity"],
   },
 ];
 
@@ -109,7 +109,7 @@ export function WorkstationCard() {
           Workstation
         </h3>
         <p className="text-xs text-[#8A8F98] mt-1">
-          Thiết bị, hệ điều hành & môi trường lập trình hàng ngày
+          Daily development environment, hardware & workstation setup
         </p>
 
         {/* 2-Column Luxury Minimalist Grid */}
@@ -153,29 +153,29 @@ export function WorkstationCard() {
           <div className="flex items-center justify-between mb-2.5">
             <div className="flex items-center gap-2">
               <Cpu className="size-3.5 text-indigo-400" />
-              <span className="text-xs font-medium text-[#EDEDEF]">Cấu Hình Phần Cứng Máy</span>
+              <span className="text-xs font-medium text-[#EDEDEF]">Hardware Specifications</span>
             </div>
             <span className="font-mono text-[10px] text-emerald-400 flex items-center gap-1">
               <span className="size-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.8)]" />
-              Dell Inspiron 3493
+              ROG Zephyrus G14
             </span>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-mono">
             <div className="rounded-lg bg-black/30 border border-white/[0.04] p-2">
               <p className="text-[10px] text-white/40">CPU</p>
-              <p className="text-white font-medium truncate" title="Intel Core i5-1035G1 (4C/8T)">Intel i5-1035G1</p>
+              <p className="text-white font-medium truncate" title="Intel Core i7-13700H (14C/20T, 5.0GHz)">Intel i7-13700H</p>
             </div>
             <div className="rounded-lg bg-black/30 border border-white/[0.04] p-2">
               <p className="text-[10px] text-white/40">RAM</p>
-              <p className="text-white font-medium tabular-nums">16.0 GB DDR4</p>
+              <p className="text-white font-medium tabular-nums" title="32GB Dual-Channel DDR5 5600MHz">32.0 GB DDR5</p>
             </div>
             <div className="rounded-lg bg-black/30 border border-white/[0.04] p-2">
               <p className="text-[10px] text-white/40">STORAGE</p>
-              <p className="text-white font-medium tabular-nums">256 GB NVMe</p>
+              <p className="text-white font-medium tabular-nums" title="1TB PCIe 4.0 NVMe SSD (7000MB/s)">1.0 TB NVMe Gen4</p>
             </div>
             <div className="rounded-lg bg-black/30 border border-white/[0.04] p-2">
               <p className="text-[10px] text-white/40">GPU</p>
-              <p className="text-white font-medium truncate" title="Intel Iris Plus Graphics G1">Iris Plus G1</p>
+              <p className="text-white font-medium truncate" title="NVIDIA GeForce RTX 4060 (8GB GDDR6)">RTX 4060 8GB</p>
             </div>
           </div>
         </div>
@@ -189,10 +189,10 @@ export function WorkstationCard() {
         >
           <div>
             <h4 className="font-semibold text-xs text-[#EDEDEF]">
-              Tiến Trình Kỹ Thuật & Dấu Mốc
+              Engineering Milestones & Roadmap
             </h4>
             <p className="text-[11px] text-[#8A8F98] mt-0.5">
-              Từ đam mê Arduino phần cứng, làm chủ PHP/MySQL đến Next.js & AI Bùng Nổ
+              From Arduino hardware, mastering PHP/MySQL to Next.js & AI agentic workflows
             </p>
           </div>
           <ChevronDown

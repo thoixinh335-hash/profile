@@ -87,7 +87,7 @@ export function DonateButton() {
                     Buy Me a Coffee
                   </h3>
                   <p className="text-xs text-[#8A8F98]">
-                    Hỗ trợ duy trì máy chủ & phát triển dự án ☕
+                    Support server uptime & open-source development ☕
                   </p>
                 </div>
               </div>
@@ -109,13 +109,13 @@ export function DonateButton() {
                 <div className="text-left">
                   <div className="flex items-center gap-1.5 text-[10px] uppercase font-semibold text-indigo-400">
                     <Sparkles className="size-2.5" />
-                    <span>MB Bank • Ngân Hàng Quân Đội</span>
+                    <span>MB Bank • Military Commercial Bank</span>
                   </div>
                   <div className="mt-0.5 font-mono text-sm font-bold text-white tracking-wider tabular-nums">
                     0334066961
                   </div>
                   <div className="text-[11px] text-[#8A8F98]">
-                    Chủ tài khoản: <span className="text-[#EDEDEF] font-medium">LƯU ĐỨC HUY</span>
+                    Account Name: <span className="text-[#EDEDEF] font-medium">LƯU ĐỨC HUY</span>
                   </div>
                 </div>
 

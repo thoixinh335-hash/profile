@@ -42,7 +42,7 @@ export function HeartCounter({ large = false }: { large?: boolean }) {
       onClick={toggle}
       disabled={liked}
       aria-label="Endorse developer"
-      className={`group relative flex items-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.04] px-3.5 py-1.5 text-xs font-sans font-medium text-white transition-all duration-150 hover:border-rose-500/40 hover:bg-rose-500/10 hover:shadow-[0_0_16px_rgba(244,63,94,0.15)] active:scale-[0.98] ${
+      className={`group relative flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.03] px-3.5 py-1.5 text-xs font-sans font-medium text-white transition-all duration-150 hover:border-rose-500/40 hover:bg-rose-500/10 hover:shadow-[0_0_16px_rgba(244,63,94,0.18)] active:scale-[0.98] ${
         liked ? "border-rose-500/40 bg-rose-500/10 text-rose-300" : ""
       }`}
     >
@@ -54,7 +54,7 @@ export function HeartCounter({ large = false }: { large?: boolean }) {
         }`}
       />
       <span className="font-mono tabular-nums text-xs">{count.toLocaleString()}</span>
-      <span className="text-[11px] font-sans text-white/50 group-hover:text-rose-200">
+      <span className="text-[11px] font-sans text-white/40 group-hover:text-rose-200">
         {liked ? "Endorsed" : "Endorse"}
       </span>
     </button>

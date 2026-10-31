@@ -233,8 +233,8 @@ export function CyberArsenal() {
           <button
             type="button"
             onClick={fetchData}
-            title="Làm mới repositories"
-            aria-label="Làm mới repositories"
+            title="Refresh repositories"
+            aria-label="Refresh repositories"
             className="flex size-5 items-center justify-center rounded-md border border-white/[0.08] bg-white/[0.03] text-white/70 hover:border-indigo-400 hover:text-white transition-colors cursor-pointer"
           >
             <RefreshCw className={`size-2.5 ${isLoading ? "animate-spin text-indigo-400" : ""}`} />
@@ -281,7 +281,7 @@ export function CyberArsenal() {
                   setSelected(repo);
                 }}
                 className="group/chip inline-flex items-center gap-2 rounded-xl border border-white/[0.08] bg-[#16171b]/70 px-3 sm:px-3.5 py-2 font-sans text-xs font-medium text-[#EDEDEF] transition-all duration-150 hover:border-indigo-500/40 hover:bg-white/[0.05] hover:shadow-[0_0_16px_rgba(99,102,241,0.2)] active:scale-[0.97] cursor-pointer select-none text-left"
-                title={`Xem chi tiết dự án ${repo.name}`}
+                title={`View project details for ${repo.name}`}
               >
                 <Icon className="size-4 shrink-0 transition-transform duration-150 group-hover/chip:scale-110" />
                 <span className="tracking-tight">{repo.name}</span>
@@ -343,7 +343,7 @@ export function CyberArsenal() {
               <button
                 type="button"
                 onClick={handleClose}
-                aria-label="Đóng cửa sổ"
+                aria-label="Close modal"
                 className="flex size-7 items-center justify-center rounded-lg border border-white/[0.08] bg-white/[0.03] text-white/60 hover:text-white hover:bg-white/[0.08] transition-colors cursor-pointer"
               >
                 <X className="size-4" />
@@ -451,7 +451,7 @@ export function CyberArsenal() {
                 onClick={handleClose}
                 className="rounded-xl border border-white/[0.08] bg-white/[0.04] px-4 py-2 font-sans text-xs font-medium text-white/80 hover:bg-white/[0.08] hover:text-white transition-colors cursor-pointer"
               >
-                Đóng
+                Close
               </button>
             </div>
           </div>

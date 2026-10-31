@@ -107,7 +107,7 @@ export function SpotifyPlayerCard() {
           <button
             onClick={() => setCurrentTime((t) => Math.max(0, t - 10))}
             className="text-white/40 hover:text-white transition-colors p-1"
-            title="Lùi 10s"
+            title="Rewind 10s"
           >
             <SkipBack className="size-4" />
           </button>
@@ -115,7 +115,7 @@ export function SpotifyPlayerCard() {
           <button
             onClick={() => setIsPlaying(!isPlaying)}
             className="flex size-8 items-center justify-center rounded-full bg-white text-black hover:scale-105 active:scale-95 transition-all shadow-[0_0_15px_rgba(255,255,255,0.4)]"
-            title={isPlaying ? "Tạm dừng" : "Phát"}
+            title={isPlaying ? "Pause" : "Play"}
           >
             {isPlaying ? (
               <Pause className="size-3.5 fill-black" />

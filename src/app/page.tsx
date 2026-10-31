@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
+import { EnterScreen } from "@/components/enter-screen";
 import { AmbientAudio } from "@/components/ambient-audio";
 import { LiquidChromeBackground } from "@/components/liquid-chrome-bg";
 import { ProfileBadgeCards } from "@/components/profile-badge-cards";
@@ -29,9 +30,10 @@ const SOCIAL_PILLS = [
   { href: "https://losinginterest.life/huyduc", Icon: GlobeIcon, label: "losinginterest.life" },
 ];
 
-type SectionId = "about" | "setup" | "skills" | "projects";
+type SectionId = "about" | "setup" | "skills";
 
 export default function Home() {
+  const [hasEntered, setHasEntered] = useState(false);
   const [activeSection, setActiveSection] = useState<SectionId>("about");
   const isManualScrollRef = useRef(false);
   const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -42,35 +44,49 @@ export default function Home() {
       // Don't fight programmatic smooth-scrolling while user clicked a nav tab
       if (isManualScrollRef.current) return;
 
-      // 1. If user is scrolled near bottom of the page -> lock 'projects'
+      // 1. If user is near bottom of the page -> user is in skills & projects
       const scrollPosition = window.innerHeight + window.scrollY;
       const totalHeight = document.documentElement.scrollHeight;
-      if (scrollPosition >= totalHeight - 200) {
-        setActiveSection("projects");
+      if (scrollPosition >= totalHeight - 40) {
+        setActiveSection("skills");
         return;
       }
 
       // 2. Viewport-relative boundary detection from bottom to top
-      const threshold = window.innerWidth < 768 ? 140 : 180;
-      const sections: SectionId[] = ["projects", "skills", "setup", "about"];
+      const threshold = window.innerWidth < 768 ? 160 : 200;
 
-      for (const id of sections) {
-        const el = document.getElementById(id);
-        if (el) {
-          const rect = el.getBoundingClientRect();
-          if (rect.top <= threshold) {
-            setActiveSection(id);
-            return;
-          }
-        }
+      const elProjects = document.getElementById("projects");
+      const elSkills = document.getElementById("skills");
+      if (
+        (elProjects && elProjects.getBoundingClientRect().top <= threshold) ||
+        (elSkills && elSkills.getBoundingClientRect().top <= threshold)
+      ) {
+        setActiveSection("skills");
+        return;
       }
+
+      const elSetup = document.getElementById("setup");
+      if (elSetup && elSetup.getBoundingClientRect().top <= threshold) {
+        setActiveSection("setup");
+        return;
+      }
+
       setActiveSection("about");
     };
 
+    const onUserScrollIntent = () => {
+      isManualScrollRef.current = false;
+      if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
+    };
+
+    window.addEventListener("wheel", onUserScrollIntent, { passive: true });
+    window.addEventListener("touchmove", onUserScrollIntent, { passive: true });
     window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
     return () => {
       window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("wheel", onUserScrollIntent);
+      window.removeEventListener("touchmove", onUserScrollIntent);
       if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
     };
   }, []);
@@ -85,16 +101,25 @@ export default function Home() {
 
     const el = document.getElementById(id);
     if (!el) return;
-    el.scrollIntoView({ behavior: "smooth", block: "start" });
+    const offset = window.innerWidth < 768 ? 75 : 90;
+    const elementPosition = el.getBoundingClientRect().top + window.scrollY;
+    window.scrollTo({
+      top: elementPosition - offset,
+      behavior: "smooth",
+    });
   };
 
   // Jump to hash section if present in URL on mount
   useEffect(() => {
     if (typeof window !== "undefined" && window.location.hash) {
-      const hash = window.location.hash.replace("#", "") as SectionId;
-      if (["about", "setup", "skills", "projects"].includes(hash)) {
+      const hash = window.location.hash.replace("#", "");
+      if (hash === "skills" || hash === "projects") {
         setTimeout(() => {
-          scrollToSection(hash);
+          scrollToSection("skills");
+        }, 200);
+      } else if (hash === "about" || hash === "setup") {
+        setTimeout(() => {
+          scrollToSection(hash as SectionId);
         }, 200);
       }
     }
@@ -104,6 +129,9 @@ export default function Home() {
     <LanyardProvider userId={DISCORD_ID}>
       <VisitorTelemetry />
 
+      {/* Zyo.lol Style "Click Anywhere to Enter" Gatekeeper Splash */}
+      <EnterScreen onEnter={() => setHasEntered(true)} />
+
       {/* 3D Liquid Chrome Wave Background */}
       <LiquidChromeBackground />
 
@@ -111,7 +139,11 @@ export default function Home() {
       <AmbientAudio />
 
       {/* Top Banner (Clean Pill on Desktop) */}
-      <div className="fixed top-5 left-1/2 -translate-x-1/2 z-40 hidden sm:flex items-center gap-2 rounded-full border border-white/[0.08] bg-black/60 px-4 py-1.5 backdrop-blur-md shadow-[0_4px_24px_rgba(0,0,0,0.5)]">
+      <div
+        className={`fixed top-5 left-1/2 -translate-x-1/2 z-40 hidden sm:flex items-center gap-2 rounded-full border border-white/[0.08] bg-black/60 px-4 py-1.5 backdrop-blur-md shadow-[0_4px_24px_rgba(0,0,0,0.5)] transition-all duration-[950ms] ease-out ${
+          hasEntered ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4 pointer-events-none"
+        }`}
+      >
         <Sparkles className="size-3 text-indigo-400" />
         <span className="font-sans text-xs font-medium text-white/90">
           Available for contract & full-stack web projects
@@ -120,7 +152,13 @@ export default function Home() {
       </div>
 
       {/* Main Container */}
-      <div className="relative z-10 mx-auto max-w-5xl px-4 sm:px-6 py-6 sm:py-14">
+      <div
+        className={`relative z-10 mx-auto max-w-5xl px-4 sm:px-6 py-6 sm:py-14 transition-all duration-[950ms] ease-out ${
+          hasEntered
+            ? "opacity-100 scale-100 blur-0"
+            : "opacity-0 scale-[0.97] blur-md pointer-events-none"
+        }`}
+      >
         {/* ================= MOBILE PROFILE HEADER ================= */}
         <div className="block md:hidden select-none mb-3 animate-entrance">
           <div className="flex items-center gap-3">
@@ -162,8 +200,7 @@ export default function Home() {
             {[
               { id: "about" as const, label: "About" },
               { id: "setup" as const, label: "Setup" },
-              { id: "skills" as const, label: "Skills" },
-              { id: "projects" as const, label: "Projects" },
+              { id: "skills" as const, label: "Skills & Projects" },
             ].map(({ id, label }) => {
               const isActive = activeSection === id;
               return (
@@ -209,13 +246,12 @@ export default function Home() {
               </p>
             </div>
 
-            {/* Vertical Navigation (— ABOUT, — SETUP, — SKILLS, — PROJECTS) with Silky Morph Indicator */}
+            {/* Vertical Navigation (— ABOUT, — SETUP, — SKILLS & PROJECTS) with Silky Morph Indicator */}
             <nav className="space-y-2.5 pt-1">
               {[
                 { id: "about" as const, label: "ABOUT" },
                 { id: "setup" as const, label: "SETUP" },
-                { id: "skills" as const, label: "SKILLS" },
-                { id: "projects" as const, label: "PROJECTS" },
+                { id: "skills" as const, label: "SKILLS & PROJECTS" },
               ].map(({ id, label }) => {
                 const isActive = activeSection === id;
                 return (
@@ -318,7 +354,7 @@ export default function Home() {
                   Skills
                 </span>
                 <p className="mt-0.5 font-sans text-xs sm:text-sm text-[#8A8F98]">
-                  Hệ sinh thái kỹ thuật & công nghệ cốt lõi
+                  Core engineering stack & specialized technologies
                 </p>
               </div>
 
@@ -338,7 +374,7 @@ export default function Home() {
                   Projects
                 </span>
                 <p className="mt-0.5 font-sans text-xs sm:text-sm text-[#8A8F98]">
-                  Các dự án open-source tiêu biểu & mã nguồn thực chiến
+                  Featured open-source repositories & production architectures
                 </p>
               </div>
 
@@ -348,23 +384,16 @@ export default function Home() {
               </div>
 
               {/* Telemetry Endorsements & Pageviews */}
-              <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-white/[0.08] bg-black/40 p-3.5 sm:p-4 backdrop-blur-md text-xs font-mono">
-                <div className="flex items-center gap-3 sm:gap-4">
-                  <ViewCounter />
-                  <HeartCounter />
-                </div>
-                <div className="flex items-center gap-1.5 text-white/40 text-[10px] sm:text-[11px]">
-                  <span>Stack: Turbopack • Tailwind v4</span>
-                  <span>•</span>
-                  <span className="text-emerald-400">99.99% Uptime</span>
-                </div>
+              <div className="flex items-center justify-center sm:justify-start gap-2.5 pt-1">
+                <ViewCounter />
+                <HeartCounter />
               </div>
             </section>
           </main>
         </div>
 
         {/* Global Minimalist Footer */}
-        <footer className="mt-6 sm:mt-8 border-t border-white/[0.06] pt-6 text-center select-none">
+        <footer className="mt-6 sm:mt-8 border-t border-white/[0.06] pt-6 pb-14 sm:pb-6 text-center select-none">
           <p className="font-sans text-[11px] sm:text-xs text-[#8A8F98]">
             Designed & Developed by <span className="text-white font-medium">Lưu Đức Huy</span> (@darkwy) • Liquid Chrome Aesthetic
           </p>
