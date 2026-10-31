@@ -30,7 +30,7 @@ const SOCIAL_PILLS = [
   { href: "https://losinginterest.life/huyduc", Icon: GlobeIcon, label: "losinginterest.life" },
 ];
 
-type SectionId = "about" | "setup" | "skills";
+type SectionId = "about" | "setup" | "skills" | "projects";
 
 export default function Home() {
   const [hasEntered, setHasEntered] = useState(false);
@@ -44,31 +44,27 @@ export default function Home() {
       // Don't fight programmatic smooth-scrolling while user clicked a nav tab
       if (isManualScrollRef.current) return;
 
-      // 1. If user is near bottom of the page -> user is in skills & projects
+      // 1. If user is scrolled near bottom of the page -> lock 'projects'
       const scrollPosition = window.innerHeight + window.scrollY;
       const totalHeight = document.documentElement.scrollHeight;
-      if (scrollPosition >= totalHeight - 40) {
-        setActiveSection("skills");
+      if (scrollPosition >= totalHeight - 200) {
+        setActiveSection("projects");
         return;
       }
 
       // 2. Viewport-relative boundary detection from bottom to top
-      const threshold = window.innerWidth < 768 ? 160 : 200;
+      const threshold = window.innerWidth < 768 ? 140 : 180;
+      const sections: SectionId[] = ["projects", "skills", "setup", "about"];
 
-      const elProjects = document.getElementById("projects");
-      const elSkills = document.getElementById("skills");
-      if (
-        (elProjects && elProjects.getBoundingClientRect().top <= threshold) ||
-        (elSkills && elSkills.getBoundingClientRect().top <= threshold)
-      ) {
-        setActiveSection("skills");
-        return;
-      }
-
-      const elSetup = document.getElementById("setup");
-      if (elSetup && elSetup.getBoundingClientRect().top <= threshold) {
-        setActiveSection("setup");
-        return;
+      for (const id of sections) {
+        const el = document.getElementById(id);
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          if (rect.top <= threshold) {
+            setActiveSection(id);
+            return;
+          }
+        }
       }
 
       setActiveSection("about");
@@ -112,14 +108,10 @@ export default function Home() {
   // Jump to hash section if present in URL on mount
   useEffect(() => {
     if (typeof window !== "undefined" && window.location.hash) {
-      const hash = window.location.hash.replace("#", "");
-      if (hash === "skills" || hash === "projects") {
+      const hash = window.location.hash.replace("#", "") as SectionId;
+      if (["about", "setup", "skills", "projects"].includes(hash)) {
         setTimeout(() => {
-          scrollToSection("skills");
-        }, 200);
-      } else if (hash === "about" || hash === "setup") {
-        setTimeout(() => {
-          scrollToSection(hash as SectionId);
+          scrollToSection(hash);
         }, 200);
       }
     }
@@ -153,10 +145,8 @@ export default function Home() {
 
       {/* Main Container */}
       <div
-        className={`relative z-10 mx-auto max-w-5xl w-full max-w-full overflow-x-hidden px-4 sm:px-6 py-6 sm:py-14 transition-all duration-[950ms] ease-out ${
-          hasEntered
-            ? "opacity-100 scale-100 blur-0"
-            : "opacity-0 scale-[0.97] blur-md pointer-events-none"
+        className={`relative z-10 mx-auto max-w-5xl w-full px-4 sm:px-6 py-6 sm:py-14 transition-opacity duration-700 ease-out ${
+          hasEntered ? "opacity-100" : "opacity-0 pointer-events-none"
         }`}
       >
         {/* ================= MOBILE PROFILE HEADER ================= */}
@@ -200,7 +190,8 @@ export default function Home() {
             {[
               { id: "about" as const, label: "About" },
               { id: "setup" as const, label: "Setup" },
-              { id: "skills" as const, label: "Skills & Projects" },
+              { id: "skills" as const, label: "Skills" },
+              { id: "projects" as const, label: "Projects" },
             ].map(({ id, label }) => {
               const isActive = activeSection === id;
               return (
@@ -222,9 +213,9 @@ export default function Home() {
           </nav>
         </div>
 
-        <div className="flex flex-col md:flex-row items-start gap-6 lg:gap-12 w-full max-w-full min-w-0">
+        <div className="flex flex-col md:flex-row items-start gap-6 lg:gap-12 w-full min-w-0">
           {/* ================= LEFT COLUMN (DESKTOP STICKY SIDEBAR) ================= */}
-          <aside className="hidden md:block w-60 lg:w-68 shrink-0 md:sticky md:top-20 self-start space-y-6 select-none animate-entrance">
+          <aside className="hidden md:block w-60 lg:w-68 shrink-0 md:sticky md:top-20 self-start space-y-6 select-none">
             {/* Name & Handle */}
             <div>
               <h1 className="font-sans font-bold text-3xl sm:text-4xl tracking-tight text-[#EDEDEF]">
@@ -246,12 +237,13 @@ export default function Home() {
               </p>
             </div>
 
-            {/* Vertical Navigation (— ABOUT, — SETUP, — SKILLS & PROJECTS) with Silky Morph Indicator */}
+            {/* Vertical Navigation (— ABOUT, — SETUP, — SKILLS, — PROJECTS) with Silky Morph Indicator */}
             <nav className="space-y-2.5 pt-1">
               {[
                 { id: "about" as const, label: "ABOUT" },
                 { id: "setup" as const, label: "SETUP" },
-                { id: "skills" as const, label: "SKILLS & PROJECTS" },
+                { id: "skills" as const, label: "SKILLS" },
+                { id: "projects" as const, label: "PROJECTS" },
               ].map(({ id, label }) => {
                 const isActive = activeSection === id;
                 return (
@@ -292,7 +284,7 @@ export default function Home() {
           </aside>
 
           {/* ================= RIGHT COLUMN (FLOWING SECTIONS) ================= */}
-          <main className="flex-1 min-w-0 space-y-8 sm:space-y-10 w-full max-w-full overflow-hidden pb-4 sm:pb-6">
+          <main className="flex-1 min-w-0 space-y-8 sm:space-y-10 w-full pb-4 sm:pb-6">
             {/* SECTION 1: ABOUT */}
             <section
               id="about"
@@ -384,9 +376,16 @@ export default function Home() {
               </div>
 
               {/* Telemetry Endorsements & Pageviews */}
-              <div className="flex items-center justify-center sm:justify-start gap-2.5 pt-1">
-                <ViewCounter />
-                <HeartCounter />
+              <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-white/[0.08] bg-black/40 p-3.5 sm:p-4 backdrop-blur-md text-xs font-mono">
+                <div className="flex items-center gap-3 sm:gap-4">
+                  <ViewCounter />
+                  <HeartCounter />
+                </div>
+                <div className="flex items-center gap-1.5 text-white/40 text-[10px] sm:text-[11px]">
+                  <span>Stack: Turbopack • Tailwind v4</span>
+                  <span>•</span>
+                  <span className="text-emerald-400">99.99% Uptime</span>
+                </div>
               </div>
             </section>
           </main>

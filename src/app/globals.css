@@ -41,9 +41,6 @@ html, body {
   scrollbar-width: none;
   -ms-overflow-style: none;
   scroll-behavior: smooth;
-  overflow-x: hidden;
-  max-width: 100vw;
-  width: 100%;
 }
 
 html::-webkit-scrollbar,
@@ -56,9 +53,6 @@ body {
   color: #ededef;
   font-family: var(--font-sans);
   overflow-x: hidden;
-  max-width: 100vw;
-  width: 100%;
-  position: relative;
 }
 
 /* Scroll Margins for Seamless Section Navigation */

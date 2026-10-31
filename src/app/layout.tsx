@@ -32,9 +32,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} dark h-full w-full max-w-full overflow-x-hidden antialiased [scrollbar-width:none]`}
+      className={`${geistSans.variable} ${geistMono.variable} dark h-full antialiased [scrollbar-width:none]`}
     >
-      <body className="min-h-full w-full max-w-full overflow-x-hidden flex flex-col font-sans bg-[#08090a] text-[#ededef] selection:bg-indigo-500/30 selection:text-indigo-200 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <body className="min-h-full flex flex-col font-sans bg-[#08090a] text-[#ededef] selection:bg-indigo-500/30 selection:text-indigo-200 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {children}
       </body>
     </html>
