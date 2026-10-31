@@ -334,15 +334,15 @@ export function CyberArsenal() {
           role="dialog"
           aria-modal="true"
           aria-labelledby={titleId}
-          className={`fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-4 overflow-y-auto bg-black/85 backdrop-blur-md transition-opacity duration-200 ${
+          className={`fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-md transition-opacity duration-200 ${
             isClosing ? "opacity-0" : "opacity-100"
           }`}
           onClick={handleClose}
         >
           <div
-            className={`linear-card relative w-full max-w-2xl max-h-[90vh] overflow-y-auto custom-scrollbar my-auto p-5 sm:p-6 border border-white/[0.12] rounded-2xl shadow-[0_25px_80px_rgba(0,0,0,0.85),0_0_40px_rgba(99,102,241,0.18)] bg-[#121215] transition-all duration-200 ${
+            className={`linear-card relative w-full max-w-lg my-auto p-4 sm:p-5 border border-white/[0.12] rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.85),0_0_30px_rgba(99,102,241,0.15)] bg-[#121215] transition-all duration-200 ${
               isClosing
-                ? "opacity-0 scale-95 translate-y-3"
+                ? "opacity-0 scale-95 translate-y-2"
                 : "opacity-100 scale-100 translate-y-0"
             }`}
             onClick={(e) => e.stopPropagation()}
@@ -350,114 +350,98 @@ export function CyberArsenal() {
             {/* Ambient Brand Color Bloom */}
             <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-2xl">
               <div
-                className="absolute -top-20 left-1/2 -translate-x-1/2 h-44 w-96 rounded-full blur-3xl opacity-30 transition-all duration-300"
+                className="absolute -top-16 left-1/2 -translate-x-1/2 h-36 w-80 rounded-full blur-3xl opacity-25 transition-all duration-300"
                 style={{ background: selectedColors.glow }}
               />
             </div>
 
-            {/* Top Status Bar */}
-            <div className="flex items-center justify-between border-b border-white/[0.08] pb-3 text-xs">
-              <div className="flex items-center gap-2 flex-wrap min-w-0">
-                <span className="size-2 rounded-full bg-indigo-500 shadow-[0_0_8px_rgba(99,102,241,1)] animate-pulse shrink-0" />
-                <span className="font-sans font-semibold text-white text-xs shrink-0">
-                  Repository Specification
-                </span>
-                <span className="rounded-md border border-indigo-500/30 bg-indigo-500/10 px-2 py-0.5 text-[10px] font-mono text-indigo-300 font-medium">
-                  {spec?.category || "FULL-STACK ARCHITECTURE"}
-                </span>
-                <span className="rounded-md border border-white/[0.08] bg-white/[0.04] px-1.5 py-0.5 text-[10px] font-mono text-white/60">
-                  {selected.status}
-                </span>
+            {/* Header: Title, Icon, Status & Close */}
+            <div className="flex items-start justify-between gap-3 border-b border-white/[0.08] pb-3">
+              <div className="flex items-center gap-3 min-w-0">
+                <div
+                  className="relative flex size-10 shrink-0 items-center justify-center rounded-xl border bg-[#18191f] p-2 shadow-sm"
+                  style={{ borderColor: selectedColors.border }}
+                >
+                  <SelectedIcon className="size-5 sm:size-6 drop-shadow-sm" />
+                </div>
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2">
+                    <h3 id={titleId} className="font-sans text-base sm:text-lg font-bold text-white tracking-tight truncate">
+                      {selected.name}
+                    </h3>
+                    <span className="rounded-md border border-white/[0.08] bg-white/[0.04] px-1.5 py-0.5 font-mono text-[9.5px] font-medium text-white/60">
+                      {selected.status}
+                    </span>
+                  </div>
+                  <p className="font-mono text-[10.5px] text-white/40 truncate">
+                    {selected.fullName}
+                  </p>
+                </div>
               </div>
 
-              {/* Close Button */}
               <button
                 type="button"
                 onClick={handleClose}
                 aria-label="Close modal"
-                className="flex size-7 items-center justify-center rounded-lg border border-white/[0.08] bg-white/[0.03] text-white/60 hover:text-white hover:bg-white/[0.08] transition-colors cursor-pointer shrink-0 ml-2"
+                className="flex size-7 items-center justify-center rounded-lg border border-white/[0.08] bg-white/[0.03] text-white/60 hover:text-white hover:bg-white/[0.08] transition-colors cursor-pointer shrink-0"
               >
                 <X className="size-4" />
               </button>
             </div>
 
-            {/* Main Hero Identity Section */}
-            <div className="mt-4 flex items-start gap-3.5 sm:gap-4">
-              {/* Language / Folder Logo in Reticle Box */}
-              <div
-                className="relative flex size-13 sm:size-14 shrink-0 items-center justify-center rounded-xl border bg-[#18191f] p-3 shadow-md"
-                style={{ borderColor: selectedColors.border }}
-              >
-                <SelectedIcon className="size-7 sm:size-8 drop-shadow-sm" />
-              </div>
-
-              {/* Title & Info */}
-              <div className="min-w-0 flex-1">
-                <div className="flex flex-wrap items-center gap-2">
-                  <h3 id={titleId} className="font-sans text-lg sm:text-xl font-bold text-white tracking-tight">
-                    {selected.name}
-                  </h3>
-                  <span className="rounded-md border border-white/[0.08] bg-white/[0.04] px-2 py-0.5 font-mono text-[10px] font-medium text-white/70">
-                    {selected.language}
-                  </span>
+            {/* Architecture Headline & Description */}
+            <div className="mt-3">
+              <p className="font-sans text-xs text-[#EDEDEF]/85 leading-relaxed">
+                {selected.description}
+              </p>
+              {spec?.architecture && (
+                <div className="mt-1.5 flex items-center gap-1.5 text-[11px] font-mono text-indigo-300/90">
+                  <Layers className="size-3 text-indigo-400 shrink-0" />
+                  <span className="truncate">{spec.architecture}</span>
                 </div>
-                <p className="mt-0.5 font-mono text-xs text-white/40 truncate">
-                  {selected.fullName}
-                </p>
-                {spec?.architecture && (
-                  <p className="mt-1 text-xs text-indigo-300 font-sans font-medium flex items-center gap-1.5">
-                    <Layers className="size-3 text-indigo-400 shrink-0" />
-                    <span className="truncate">{spec.architecture}</span>
-                  </p>
-                )}
+              )}
+            </div>
+
+            {/* Compact Metric Ribbon */}
+            <div className="mt-3 grid grid-cols-3 gap-2 font-mono text-xs">
+              <div className="flex items-center justify-center gap-1.5 rounded-lg border border-white/[0.06] bg-[#16171b] px-2 py-1.5">
+                <Star className="size-3 text-amber-400 fill-amber-400 shrink-0" />
+                <span className="text-white/80 font-bold tabular-nums text-xs">{selected.stars}</span>
+                <span className="text-[10px] text-white/40">stars</span>
+              </div>
+              <div className="flex items-center justify-center gap-1.5 rounded-lg border border-white/[0.06] bg-[#16171b] px-2 py-1.5">
+                <GitFork className="size-3 text-indigo-400 shrink-0" />
+                <span className="text-white/80 font-bold tabular-nums text-xs">{selected.forks}</span>
+                <span className="text-[10px] text-white/40">forks</span>
+              </div>
+              <div className="flex items-center justify-center gap-1.5 rounded-lg border border-white/[0.06] bg-[#16171b] px-2 py-1.5 truncate">
+                <span className="size-1.5 rounded-full bg-cyan-400 shrink-0" />
+                <span className="text-white/80 font-medium truncate text-[11px]">{selected.language}</span>
               </div>
             </div>
 
-            {/* 4-Column Telemetry Bento Grid */}
-            <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-2 font-mono">
-              <div className="rounded-xl border border-white/[0.06] bg-[#16171b] p-2.5 text-center">
-                <div className="text-[10px] text-white/40 font-semibold uppercase">STARS</div>
-                <div className="mt-0.5 text-base font-bold text-amber-400 tabular-nums flex items-center justify-center gap-1">
-                  <Star className="size-3 fill-amber-400" />
-                  <span>{selected.stars}</span>
-                </div>
-                <div className="mt-0.5 text-[9px] text-white/40">GITHUB RATING</div>
+            {/* Compact Key Highlights */}
+            {spec && spec.highlights.length > 0 && (
+              <div className="mt-2.5 rounded-xl border border-white/[0.06] bg-black/40 p-2.5 space-y-1.5">
+                {spec.highlights.slice(0, 3).map((h, idx) => (
+                  <div key={idx} className="flex items-start gap-2 text-[11px] leading-tight">
+                    <span className="size-1.5 rounded-full bg-indigo-400 mt-1 shrink-0" />
+                    <p className="text-white/70">
+                      <strong className="text-white/90 font-medium">{h.title}:</strong>{" "}
+                      {h.description}
+                    </p>
+                  </div>
+                ))}
               </div>
+            )}
 
-              <div className="rounded-xl border border-white/[0.06] bg-[#16171b] p-2.5 text-center">
-                <div className="text-[10px] text-white/40 font-semibold uppercase">FORKS</div>
-                <div className="mt-0.5 text-base font-bold text-indigo-300 tabular-nums flex items-center justify-center gap-1">
-                  <GitFork className="size-3" />
-                  <span>{selected.forks}</span>
-                </div>
-                <div className="mt-0.5 text-[9px] text-white/40">COMMUNITY</div>
-              </div>
-
-              <div className="rounded-xl border border-white/[0.06] bg-[#16171b] p-2.5 text-center">
-                <div className="text-[10px] text-white/40 font-semibold uppercase">ENGINE</div>
-                <div className="mt-0.5 text-xs font-bold text-cyan-400 truncate" title={spec?.engine || selected.language}>
-                  {selected.language}
-                </div>
-                <div className="mt-0.5 text-[9px] text-white/40 truncate">RUNTIME</div>
-              </div>
-
-              <div className="rounded-xl border border-white/[0.06] bg-[#16171b] p-2.5 text-center">
-                <div className="text-[10px] text-white/40 font-semibold uppercase">STATUS</div>
-                <div className="mt-0.5 text-xs font-bold text-emerald-400 truncate flex items-center justify-center gap-1">
-                  <span className="size-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                  <span>{selected.status}</span>
-                </div>
-                <div className="mt-0.5 text-[9px] text-white/40">LIFECYCLE</div>
-              </div>
-            </div>
-
-            {/* Tech Stack & Architecture Tags */}
+            {/* Tech Tags */}
             {spec && spec.tags.length > 0 && (
-              <div className="mt-3 flex flex-wrap items-center gap-1.5">
-                {spec.tags.map((tag) => (
+              <div className="mt-2.5 flex flex-wrap items-center gap-1">
+                {spec.tags.slice(0, 6).map((tag) => (
                   <span
                     key={tag}
-                    className="inline-flex items-center rounded-lg border border-white/[0.08] bg-white/[0.03] px-2 py-0.5 font-mono text-[10px] font-medium text-white/70 hover:border-indigo-400/30 hover:text-white transition-colors"
+                    className="inline-flex items-center rounded-md border border-white/[0.08] bg-white/[0.03] px-1.5 py-0.5 font-mono text-[9.5px] font-medium text-white/60"
                   >
                     {tag}
                   </span>
@@ -465,117 +449,67 @@ export function CyberArsenal() {
               </div>
             )}
 
-            {/* Core Architectural Capabilities Bento */}
-            {spec && spec.highlights.length > 0 && (
-              <div className="mt-3.5 space-y-2">
-                <div className="font-mono text-[10px] font-semibold uppercase text-indigo-400 flex items-center gap-1.5">
-                  <Zap className="size-3 text-indigo-400" />
-                  <span>// CORE CAPABILITIES & HIGHLIGHTS</span>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                  {spec.highlights.map((h, idx) => (
-                    <div
-                      key={idx}
-                      className="rounded-xl border border-white/[0.06] bg-[#16171b] p-3 text-left transition-all hover:border-white/[0.12]"
-                    >
-                      <div className="font-sans text-xs font-semibold text-white/90 flex items-center gap-1.5 mb-1">
-                        <span className="size-1.5 rounded-full bg-indigo-400 shrink-0" />
-                        <span className="truncate">{h.title}</span>
-                      </div>
-                      <p className="font-sans text-[11px] leading-relaxed text-white/60">
-                        {h.description}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* System Specification & Workflow (Deep Dive) */}
-            <div className="mt-3.5 rounded-xl border border-white/[0.06] bg-[#16171b] p-3.5 text-xs leading-relaxed text-[#EDEDEF]/85 font-sans">
-              <div className="font-mono text-[10px] font-semibold uppercase text-indigo-400 mb-1.5 flex items-center gap-1.5">
-                <Cpu className="size-3 text-indigo-400" />
-                <span>// ARCHITECTURAL DESIGN & WORKFLOW</span>
-              </div>
-              <p className="text-white/80 leading-relaxed font-sans text-xs">
-                {spec?.deepDive || selected.description}
-              </p>
-            </div>
-
-            {/* Latest Commit Snippet (if available) */}
+            {/* Latest Commit (Compact 1-line) */}
             {selectedCommit && (
               <a
                 href={selectedCommit.url}
                 target="_blank"
                 rel="noreferrer"
                 title={`View commit [${selectedCommit.sha}] on GitHub`}
-                className="group mt-3 block rounded-xl border border-white/[0.06] bg-black/40 p-3 font-mono text-[11px] transition-all hover:border-indigo-500/40 hover:bg-white/[0.04] cursor-pointer"
+                className="group mt-2.5 flex items-center justify-between rounded-xl border border-white/[0.06] bg-black/40 px-3 py-1.5 font-mono text-[10.5px] transition-all hover:border-indigo-500/40 hover:bg-white/[0.03] cursor-pointer"
               >
-                <div className="flex items-center justify-between text-white/40 text-[10px] mb-1">
-                  <span className="flex items-center gap-1 text-indigo-400 font-semibold group-hover:text-indigo-300 transition-colors">
-                    <GitCommit className="size-3" />
-                    LATEST COMMIT
-                  </span>
-                  <div className="flex items-center gap-1.5">
-                    <span className="tabular-nums group-hover:text-white/60 transition-colors">{selectedCommit.timeAgo}</span>
-                    <ExternalLink className="size-2.5 text-white/40 group-hover:text-indigo-300 transition-colors" />
-                  </div>
+                <div className="flex items-center gap-1.5 min-w-0 mr-2">
+                  <GitCommit className="size-3 text-indigo-400 shrink-0" />
+                  <span className="text-indigo-300 font-semibold shrink-0">[{selectedCommit.sha}]</span>
+                  <span className="text-white/80 font-sans truncate">{selectedCommit.message}</span>
                 </div>
-                <p className="text-white/90 truncate font-sans group-hover:text-white transition-colors">
-                  <span className="text-indigo-300 font-mono font-semibold">[{selectedCommit.sha}]</span>{" "}
-                  {selectedCommit.message}
-                </p>
+                <div className="flex items-center gap-1 shrink-0 text-white/40">
+                  <span className="tabular-nums text-[10px]">{selectedCommit.timeAgo}</span>
+                  <ExternalLink className="size-2.5 text-white/40 group-hover:text-indigo-300 transition-colors" />
+                </div>
               </a>
             )}
 
-            {/* Git Quick Clone Bar */}
-            <div className="mt-3 flex items-center justify-between rounded-xl border border-white/[0.06] bg-black/50 px-3 py-2 font-mono text-xs">
-              <div className="flex items-center gap-2 min-w-0 flex-1 mr-2">
-                <Terminal className="size-3.5 text-indigo-400 shrink-0" />
-                <span className="text-white/40 select-none text-[11px]">$</span>
-                <span className="text-white/80 truncate text-[11px]">
-                  git clone https://github.com/thoixinh335-hash/{selected.name}.git
-                </span>
-              </div>
-              <button
-                type="button"
-                onClick={(e) => handleCopyClone(e, selected.name)}
-                className="inline-flex items-center gap-1 rounded-lg border border-white/[0.08] bg-white/[0.04] px-2 py-1 text-[10.5px] font-sans font-medium text-white/70 hover:bg-white/[0.08] hover:text-white transition-colors cursor-pointer shrink-0"
-                title="Copy git clone command"
-              >
-                {copiedClone ? (
-                  <>
-                    <Check className="size-3 text-emerald-400" />
-                    <span className="text-emerald-400 text-[10px]">Copied</span>
-                  </>
-                ) : (
-                  <>
-                    <Copy className="size-3" />
-                    <span className="text-[10px]">Copy</span>
-                  </>
-                )}
-              </button>
-            </div>
-
-            {/* Action Bar */}
-            <div className="mt-4 flex items-center justify-between border-t border-white/[0.08] pt-3.5">
+            {/* Bottom Actions */}
+            <div className="mt-3.5 flex items-center justify-between border-t border-white/[0.08] pt-3">
               <a
                 href={selected.url}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-1.5 rounded-xl border border-indigo-500/40 bg-indigo-600 px-4 py-2 font-sans text-xs font-medium text-white shadow-lg transition-all hover:bg-indigo-500 hover:border-indigo-400 hover:shadow-[0_0_20px_rgba(99,102,241,0.4)] active:scale-[0.98]"
+                className="inline-flex items-center gap-1.5 rounded-xl border border-indigo-500/40 bg-indigo-600 px-3 py-1.5 font-sans text-xs font-medium text-white shadow-md transition-all hover:bg-indigo-500 hover:border-indigo-400 hover:shadow-[0_0_15px_rgba(99,102,241,0.35)] active:scale-[0.98]"
               >
                 <span>View on GitHub</span>
-                <ExternalLink className="size-3.5" />
+                <ExternalLink className="size-3" />
               </a>
 
-              <button
-                type="button"
-                onClick={handleClose}
-                className="rounded-xl border border-white/[0.08] bg-white/[0.04] px-4 py-2 font-sans text-xs font-medium text-white/80 hover:bg-white/[0.08] hover:text-white transition-colors cursor-pointer"
-              >
-                Close
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={(e) => handleCopyClone(e, selected.name)}
+                  className="inline-flex items-center gap-1 rounded-xl border border-white/[0.08] bg-white/[0.04] px-2.5 py-1.5 text-xs font-sans font-medium text-white/70 hover:bg-white/[0.08] hover:text-white transition-colors cursor-pointer"
+                  title="Copy git clone command"
+                >
+                  {copiedClone ? (
+                    <>
+                      <Check className="size-3 text-emerald-400" />
+                      <span className="text-emerald-400 text-[11px]">Copied</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="size-3" />
+                      <span className="text-[11px]">Clone</span>
+                    </>
+                  )}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleClose}
+                  className="rounded-xl border border-white/[0.08] bg-white/[0.04] px-3 py-1.5 font-sans text-xs font-medium text-white/70 hover:bg-white/[0.08] hover:text-white transition-colors cursor-pointer"
+                >
+                  Close
+                </button>
+              </div>
             </div>
           </div>
         </div>,
