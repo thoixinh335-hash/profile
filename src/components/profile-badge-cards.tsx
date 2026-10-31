@@ -202,11 +202,9 @@ export function ProfileBadgeCards() {
           </div>
         </div>
 
-        {/* Discord Card Right Accent (:3) */}
+        {/* Discord Logo */}
         <div className="flex items-center pl-2 shrink-0">
-          <span className="text-white/45 font-mono text-sm tracking-wide group-hover:text-white/90 transition-colors select-none">
-            :3
-          </span>
+          <DiscordIcon className="size-4.5 opacity-40 group-hover:opacity-100 group-hover:scale-105 transition-all" />
         </div>
       </a>
 
@@ -255,7 +253,7 @@ export function ProfileBadgeCards() {
 
         {/* GitHub Logo */}
         <div className="flex items-center pl-2 shrink-0">
-          <GithubIcon className="size-4.5 text-white/40 group-hover:text-white transition-colors" />
+          <GithubIcon className="size-4.5 opacity-40 group-hover:opacity-100 group-hover:scale-105 transition-all" />
         </div>
       </a>
     </div>
