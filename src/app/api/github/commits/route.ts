@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { promises as fs } from "fs";
 import path from "path";
+import { execSync } from "child_process";
 
 const WEBHOOK_COMMITS_FILE = path.join(process.cwd(), "data", "github-commits.json");
 
@@ -105,13 +106,33 @@ const FALLBACK_REPOS: RepoItem[] = [
 
 const FALLBACK_TIMELINE: CommitItem[] = [
   {
+    repo: "thoixinh335-hash/profile",
+    repoShort: "profile",
+    sha: "bc6baa4",
+    message: "feat: add multi-track playlist with synced lyrics and clean zero-lag split curtain enter effect",
+    author: "thoixinh335-hash",
+    date: "2026-10-31T10:12:45Z",
+    timeAgo: "just now",
+    url: "https://github.com/thoixinh335-hash/profile/commit/bc6baa455efb67751c3fce395863d030e33cc154",
+  },
+  {
+    repo: "thoixinh335-hash/devstore-v2",
+    repoShort: "devstore-v2",
+    sha: "f62fcf4",
+    message: "feat: initial commit for DevStore V2",
+    author: "thoixinh335-hash",
+    date: "2026-10-31T09:24:04Z",
+    timeAgo: "1h ago",
+    url: "https://github.com/thoixinh335-hash/devstore-v2/commit/f62fcf45429fbcd395cf010139141553b3b11f0c",
+  },
+  {
     repo: "thoixinh335-hash/thoixinh335-hash",
     repoShort: "thoixinh335-hash",
     sha: "3a10eef",
     message: "feat: initial release of dynamic GitHub Profile README",
     author: "Duc Huy",
     date: "2026-10-30T02:34:01Z",
-    timeAgo: "today",
+    timeAgo: "1d ago",
     url: "https://github.com/thoixinh335-hash/thoixinh335-hash/commit/3a10eef11ef7b05900adbc5be44e6af88a7f074c",
   },
   {
@@ -186,6 +207,35 @@ function getTimeAgo(dateString: string): string {
   }
 }
 
+function getLocalCommit(): CommitItem | null {
+  try {
+    const out = execSync('git log -1 --format="%h|%s|%an|%cI"', {
+      encoding: "utf-8",
+      timeout: 2000,
+    }).trim();
+    if (out) {
+      const parts = out.split("|");
+      const sha = parts[0] || "bc6baa4";
+      const message = parts[1] || "feat: update portfolio";
+      const author = parts[2] || "thoixinh335-hash";
+      const date = parts[3] || new Date().toISOString();
+      return {
+        repo: "thoixinh335-hash/profile",
+        repoShort: "profile",
+        sha: sha.slice(0, 7),
+        message: message.slice(0, 80),
+        author: author,
+        date: date,
+        timeAgo: getTimeAgo(date),
+        url: `https://github.com/thoixinh335-hash/profile/commit/${sha}`,
+      };
+    }
+  } catch {
+    // Ignore
+  }
+  return null;
+}
+
 export interface GitHubProfile {
   login: string;
   name: string;
@@ -208,7 +258,7 @@ export interface CachedPayload {
 }
 
 let cachedPayload: CachedPayload | null = null;
-const CACHE_TTL_MS = 30 * 1000;
+const CACHE_TTL_MS = 20 * 1000;
 
 export async function GET() {
   const now = Date.now();
@@ -266,15 +316,23 @@ export async function GET() {
       }
     }
 
-    // 2. Fetch real commit timeline across active repos
-    const timelineRepos = ["thoixinh335-hash", "note-discord", "rng-bot", "love-wrapped-20-10"];
+    // 2. Fetch real commit timeline dynamically across the most active repos
+    const candidateRepos = Array.from(
+      new Set(["profile", "devstore-v2", "thoixinh335-hash", ...repos.slice(0, 8).map((r) => r.name)])
+    );
     const fetchedCommits: CommitItem[] = [];
 
-    const commitFetches = timelineRepos.map(async (rName) => {
+    // Local git commit as guaranteed fresh source for the current project
+    const localCommit = getLocalCommit();
+    if (localCommit) {
+      fetchedCommits.push(localCommit);
+    }
+
+    const commitFetches = candidateRepos.map(async (rName) => {
       try {
         const cRes = await fetch(
           `https://api.github.com/repos/thoixinh335-hash/${rName}/commits?per_page=3`,
-          { headers, next: { revalidate: 60 } }
+          { headers, next: { revalidate: 30 } }
         );
         if (cRes.ok) {
           const cData = await cRes.json();
@@ -285,7 +343,7 @@ export async function GET() {
                 repoShort: rName,
                 sha: c.sha.slice(0, 7),
                 message: (c.commit?.message || "").split("\n")[0].slice(0, 80),
-                author: c.commit?.author?.name || "Duc Huy",
+                author: c.commit?.author?.name || "thoixinh335-hash",
                 date: c.commit?.author?.date || new Date().toISOString(),
                 timeAgo: getTimeAgo(c.commit?.author?.date),
                 url: c.html_url,
@@ -311,9 +369,19 @@ export async function GET() {
       // No webhook file yet
     }
 
-    let timeline = fetchedCommits.length > 0 ? fetchedCommits : FALLBACK_TIMELINE;
+    // Deduplicate commits by SHA
+    const seenSha = new Set<string>();
+    const uniqueCommits: CommitItem[] = [];
+    for (const c of fetchedCommits) {
+      if (!seenSha.has(c.sha)) {
+        seenSha.add(c.sha);
+        uniqueCommits.push(c);
+      }
+    }
+
+    let timeline = uniqueCommits.length > 0 ? uniqueCommits : FALLBACK_TIMELINE;
     timeline.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-    timeline = timeline.slice(0, 8);
+    timeline = timeline.slice(0, 12);
 
     const latest = timeline[0] || FALLBACK_TIMELINE[0];
 

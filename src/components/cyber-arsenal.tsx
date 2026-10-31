@@ -126,14 +126,14 @@ const INITIAL_REPOS: RepoItem[] = [
 ];
 
 const INITIAL_COMMIT: CommitItem = {
-  repo: "thoixinh335-hash/telegram-shop-bot",
-  repoShort: "telegram-shop-bot",
-  sha: "60c77c0",
-  message: "feat: initial commit for telegram shop bot",
+  repo: "thoixinh335-hash/profile",
+  repoShort: "profile",
+  sha: "bc6baa4",
+  message: "feat: add multi-track playlist with synced lyrics and clean zero-lag split curtain enter effect",
   author: "thoixinh335-hash",
-  date: "2026-10-30T11:30:47Z",
+  date: "2026-10-31T10:12:45Z",
   timeAgo: "just now",
-  url: "https://github.com/thoixinh335-hash/telegram-shop-bot",
+  url: "https://github.com/thoixinh335-hash/profile/commit/bc6baa455efb67751c3fce395863d030e33cc154",
 };
 
 export function CyberArsenal() {
@@ -244,26 +244,30 @@ export function CyberArsenal() {
 
       {/* Slim Live Commit Ticker */}
       {latestCommit && (
-        <div className="mb-3.5 flex items-center justify-between rounded-xl border border-indigo-500/20 bg-indigo-950/20 px-3 py-2 font-mono text-[11px]">
+        <a
+          href={latestCommit.url}
+          target="_blank"
+          rel="noreferrer"
+          title={`View commit [${latestCommit.sha}] on GitHub (${latestCommit.repo})`}
+          className="group mb-3.5 flex items-center justify-between rounded-xl border border-indigo-500/20 bg-indigo-950/20 px-3 py-2 font-mono text-[11px] transition-all duration-150 hover:border-indigo-400/50 hover:bg-indigo-950/40 hover:shadow-[0_0_15px_rgba(99,102,241,0.2)] cursor-pointer active:scale-[0.99]"
+        >
           <div className="flex items-center gap-2 min-w-0 flex-1">
-            <span className="size-1.5 shrink-0 rounded-full bg-indigo-400 shadow-[0_0_6px_rgba(129,140,248,0.8)]" />
+            <span className="size-1.5 shrink-0 rounded-full bg-indigo-400 shadow-[0_0_6px_rgba(129,140,248,0.8)] animate-pulse" />
             <span className="font-semibold text-indigo-400 text-[10px] uppercase tracking-wider shrink-0">
               LATEST COMMIT:
             </span>
-            <a
-              href={latestCommit.url}
-              target="_blank"
-              rel="noreferrer"
-              className="truncate text-white/90 hover:text-indigo-300 transition-colors"
-            >
+            <span className="truncate text-white/90 group-hover:text-indigo-200 transition-colors">
               <span className="text-indigo-300 font-semibold">[{latestCommit.sha}]</span>{" "}
               <span className="text-white/80 font-sans font-medium">{latestCommit.message}</span>
-            </a>
+            </span>
           </div>
-          <span className="text-white/40 tabular-nums text-[10px] shrink-0 ml-2">
-            {latestCommit.timeAgo}
-          </span>
-        </div>
+          <div className="flex items-center gap-1.5 shrink-0 ml-2">
+            <span className="text-white/40 tabular-nums text-[10px] group-hover:text-white/60 transition-colors">
+              {latestCommit.timeAgo}
+            </span>
+            <ExternalLink className="size-3 text-indigo-400/60 group-hover:text-indigo-300 transition-colors" />
+          </div>
+        </a>
       )}
 
       {/* Interactive Repository Badges (Scrollable with Sleek Scrollbar when many repos) */}
@@ -419,19 +423,25 @@ export function CyberArsenal() {
 
             {/* Latest Commit Snippet (if available) */}
             {selectedCommit && (
-              <div className="mt-3 rounded-xl border border-white/[0.06] bg-black/40 p-3 font-mono text-[11px]">
+              <a
+                href={selectedCommit.url}
+                target="_blank"
+                rel="noreferrer"
+                title={`View commit [${selectedCommit.sha}] on GitHub`}
+                className="group mt-3 block rounded-xl border border-white/[0.06] bg-black/40 p-3 font-mono text-[11px] transition-all hover:border-indigo-500/40 hover:bg-white/[0.04] cursor-pointer"
+              >
                 <div className="flex items-center justify-between text-white/40 text-[10px] mb-1">
-                  <span className="flex items-center gap-1 text-indigo-400 font-semibold">
+                  <span className="flex items-center gap-1 text-indigo-400 font-semibold group-hover:text-indigo-300 transition-colors">
                     <GitCommit className="size-3" />
                     LATEST COMMIT
                   </span>
-                  <span className="tabular-nums">{selectedCommit.timeAgo}</span>
+                  <span className="tabular-nums group-hover:text-white/60 transition-colors">{selectedCommit.timeAgo}</span>
                 </div>
-                <p className="text-white/90 truncate font-sans">
+                <p className="text-white/90 truncate font-sans group-hover:text-white transition-colors">
                   <span className="text-indigo-300 font-mono font-semibold">[{selectedCommit.sha}]</span>{" "}
                   {selectedCommit.message}
                 </p>
-              </div>
+              </a>
             )}
 
             {/* Action Bar */}
