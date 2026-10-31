@@ -266,36 +266,38 @@ export function CyberArsenal() {
         </div>
       )}
 
-      {/* Interactive Repository Badges (Spaced Out & Airy) */}
-      <div className="flex flex-wrap gap-2 sm:gap-2.5">
-        {repos.map((repo) => {
-          const Icon = LANGUAGE_ICONS[repo.language] || FolderGit2;
+      {/* Interactive Repository Badges (Scrollable with Sleek Scrollbar when many repos) */}
+      <div className="relative">
+        <div className="max-h-[250px] sm:max-h-[275px] overflow-y-auto custom-scrollbar pr-1 sm:pr-1.5 flex flex-wrap content-start gap-2 sm:gap-2.5 pb-1">
+          {repos.map((repo) => {
+            const Icon = LANGUAGE_ICONS[repo.language] || FolderGit2;
 
-          return (
-            <button
-              key={repo.id}
-              type="button"
-              onClick={() => {
-                setIsClosing(false);
-                setSelected(repo);
-              }}
-              className="group/chip inline-flex items-center gap-2 rounded-xl border border-white/[0.08] bg-[#16171b]/70 px-3 sm:px-3.5 py-2 font-sans text-xs font-medium text-[#EDEDEF] transition-all duration-150 hover:border-indigo-500/40 hover:bg-white/[0.05] hover:shadow-[0_0_16px_rgba(99,102,241,0.2)] active:scale-[0.97] cursor-pointer select-none text-left"
-              title={`Xem chi tiết dự án ${repo.name}`}
-            >
-              <Icon className="size-4 shrink-0 transition-transform duration-150 group-hover/chip:scale-110" />
-              <span className="tracking-tight">{repo.name}</span>
-              {repo.stars > 0 && (
-                <span className="font-mono text-[10.5px] text-amber-400 font-medium flex items-center gap-0.5">
-                  <Star className="size-2.5 fill-amber-400 text-amber-400" />
-                  {repo.stars}
+            return (
+              <button
+                key={repo.id}
+                type="button"
+                onClick={() => {
+                  setIsClosing(false);
+                  setSelected(repo);
+                }}
+                className="group/chip inline-flex items-center gap-2 rounded-xl border border-white/[0.08] bg-[#16171b]/70 px-3 sm:px-3.5 py-2 font-sans text-xs font-medium text-[#EDEDEF] transition-all duration-150 hover:border-indigo-500/40 hover:bg-white/[0.05] hover:shadow-[0_0_16px_rgba(99,102,241,0.2)] active:scale-[0.97] cursor-pointer select-none text-left"
+                title={`Xem chi tiết dự án ${repo.name}`}
+              >
+                <Icon className="size-4 shrink-0 transition-transform duration-150 group-hover/chip:scale-110" />
+                <span className="tracking-tight">{repo.name}</span>
+                {repo.stars > 0 && (
+                  <span className="font-mono text-[10.5px] text-amber-400 font-medium flex items-center gap-0.5">
+                    <Star className="size-2.5 fill-amber-400 text-amber-400" />
+                    {repo.stars}
+                  </span>
+                )}
+                <span className="rounded-[5px] border border-white/[0.08] bg-white/[0.04] px-1.5 py-0.5 font-mono text-[9px] font-medium text-white/60">
+                  {repo.status}
                 </span>
-              )}
-              <span className="rounded-[5px] border border-white/[0.08] bg-white/[0.04] px-1.5 py-0.5 font-mono text-[9px] font-medium text-white/60">
-                {repo.status}
-              </span>
-            </button>
-          );
-        })}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       {/* LINEAR REPOSITORY SPECIFICATION MODAL (PORTAL) */}

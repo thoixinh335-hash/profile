@@ -178,6 +178,35 @@ button, a, input, [role="button"] {
   clip-path: inset(0% 0 0 0);
 }
 
+/* =========================================================================
+   SLEEK LINEAR DARK SCROLLBAR (MINIMALIST 4PX)
+   ========================================================================= */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+  scroll-behavior: smooth;
+  overscroll-behavior: contain;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 9999px;
+  transition: background-color 0.2s ease;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
+
 @layer base {
   * {
     border-color: rgba(255, 255, 255, 0.08);
