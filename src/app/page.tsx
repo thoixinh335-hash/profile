@@ -376,16 +376,9 @@ export default function Home() {
               </div>
 
               {/* Telemetry Endorsements & Pageviews */}
-              <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-white/[0.08] bg-black/40 p-3.5 sm:p-4 backdrop-blur-md text-xs font-mono">
-                <div className="flex items-center gap-3 sm:gap-4">
-                  <ViewCounter />
-                  <HeartCounter />
-                </div>
-                <div className="flex items-center gap-1.5 text-white/40 text-[10px] sm:text-[11px]">
-                  <span>Stack: Turbopack • Tailwind v4</span>
-                  <span>•</span>
-                  <span className="text-emerald-400">99.99% Uptime</span>
-                </div>
+              <div className="flex items-center justify-center sm:justify-start gap-2.5 pt-1">
+                <ViewCounter />
+                <HeartCounter />
               </div>
             </section>
           </main>
