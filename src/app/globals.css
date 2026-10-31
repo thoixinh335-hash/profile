@@ -101,6 +101,16 @@ section[id] {
 .delay-5 { animation-delay: 480ms; }
 
 /* Silky Music Equalizer Bars */
+@keyframes heartPop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.35) rotate(-6deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+.animate-heart-pop {
+  animation: heartPop 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
 @keyframes eqBar1 {
   0%, 100% { height: 35%; }
   50% { height: 95%; }

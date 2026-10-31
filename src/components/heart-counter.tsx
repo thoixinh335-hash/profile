@@ -3,58 +3,90 @@
 import { useEffect, useState } from "react";
 import { Sparkles, Heart } from "lucide-react";
 
+const BASE_HEARTS = 204;
+
 function useHeart() {
-  const [count, setCount] = useState<number>(1487);
+  const [count, setCount] = useState<number>(BASE_HEARTS);
   const [liked, setLiked] = useState(false);
+  const [isPopping, setIsPopping] = useState(false);
 
   useEffect(() => {
-    const saved = localStorage.getItem("hearts");
-    if (saved) setCount(parseInt(saved, 10));
-    setLiked(localStorage.getItem("heart-liked") === "1");
+    try {
+      const savedCount = localStorage.getItem("hearts_count_v2");
+      const isLiked = localStorage.getItem("hearts_liked_v2") === "1";
 
-    const onStorage = () => {
-      const s = localStorage.getItem("hearts");
-      if (s) setCount(parseInt(s, 10));
-      setLiked(localStorage.getItem("heart-liked") === "1");
-    };
-    window.addEventListener("storage", onStorage);
-    return () => window.removeEventListener("storage", onStorage);
+      let parsed = savedCount ? parseInt(savedCount, 10) : BASE_HEARTS;
+      // If legacy high value (> 500) exists, reset to 200 base
+      if (isNaN(parsed) || parsed > 500 || parsed < 100) {
+        parsed = BASE_HEARTS + (isLiked ? 1 : 0);
+        localStorage.setItem("hearts_count_v2", String(parsed));
+      }
+
+      // Cleanup legacy storage keys
+      localStorage.removeItem("hearts");
+      localStorage.removeItem("heart-liked");
+
+      setCount(parsed);
+      setLiked(isLiked);
+    } catch {
+      // localStorage disabled or SSR
+    }
   }, []);
 
   const toggle = () => {
-    if (liked) return;
-    const next = count + 1;
-    setLiked(true);
-    setCount(next);
-    localStorage.setItem("hearts", String(next));
-    localStorage.setItem("heart-liked", "1");
-    window.dispatchEvent(new Event("storage"));
+    setIsPopping(true);
+    setTimeout(() => setIsPopping(false), 350);
+
+    const nextLiked = !liked;
+    const nextCount = nextLiked ? count + 1 : Math.max(BASE_HEARTS, count - 1);
+
+    setLiked(nextLiked);
+    setCount(nextCount);
+
+    try {
+      localStorage.setItem("hearts_count_v2", String(nextCount));
+      localStorage.setItem("hearts_liked_v2", nextLiked ? "1" : "0");
+      window.dispatchEvent(new Event("storage"));
+    } catch {
+      // fallback
+    }
   };
 
-  return { count, liked, toggle };
+  return { count, liked, isPopping, toggle };
 }
 
 export function HeartCounter({ large = false }: { large?: boolean }) {
-  const { count, liked, toggle } = useHeart();
+  const { count, liked, isPopping, toggle } = useHeart();
 
   return (
     <button
+      type="button"
       onClick={toggle}
-      disabled={liked}
+      title={liked ? "Unlike profile" : "Like / Endorse profile"}
       aria-label="Endorse developer"
-      className={`group relative flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.03] px-3.5 py-1.5 text-xs font-sans font-medium text-white transition-all duration-150 hover:border-rose-500/40 hover:bg-rose-500/10 hover:shadow-[0_0_16px_rgba(244,63,94,0.18)] active:scale-[0.98] ${
-        liked ? "border-rose-500/40 bg-rose-500/10 text-rose-300" : ""
+      className={`group relative inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5 text-xs font-sans font-medium transition-all duration-150 cursor-pointer select-none active:scale-[0.96] backdrop-blur-md ${
+        liked
+          ? "border-rose-500/40 bg-rose-500/15 text-rose-200 shadow-[0_0_16px_rgba(244,63,94,0.25)]"
+          : "border-white/[0.08] bg-black/40 text-white/70 hover:border-rose-500/30 hover:bg-rose-500/10 hover:text-white hover:shadow-[0_0_12px_rgba(244,63,94,0.15)]"
       }`}
     >
       <Heart
-        className={`size-3.5 transition-all duration-150 ${
+        className={`size-3.5 transition-all duration-200 ${
+          isPopping ? "animate-heart-pop" : ""
+        } ${
           liked
-            ? "fill-rose-500 text-rose-500 drop-shadow-[0_0_8px_rgba(244,63,94,0.8)]"
-            : "text-white/60 group-hover:text-rose-400 group-hover:fill-rose-400/40"
+            ? "fill-rose-500 text-rose-500 drop-shadow-[0_0_8px_rgba(244,63,94,0.8)] scale-105"
+            : "text-white/60 group-hover:text-rose-400 group-hover:scale-110"
         }`}
       />
-      <span className="font-mono tabular-nums text-xs">{count.toLocaleString()}</span>
-      <span className="text-[11px] font-sans text-white/40 group-hover:text-rose-200">
+      <span className="font-mono tabular-nums text-xs font-medium text-[#EDEDEF]">
+        {count.toLocaleString()}
+      </span>
+      <span
+        className={`text-[11px] font-sans transition-colors ${
+          liked ? "text-rose-300 font-medium" : "text-white/40 group-hover:text-rose-200"
+        }`}
+      >
         {liked ? "Endorsed" : "Endorse"}
       </span>
     </button>
@@ -75,7 +107,9 @@ export function HeartDisplay({ minimal = false }: { minimal?: boolean }) {
   return (
     <div className="flex items-center gap-1.5 text-xs text-white/60 font-sans">
       <Sparkles className="size-3.5 text-rose-400" />
-      <span className="tabular-nums font-mono font-medium text-[#EDEDEF]">{count.toLocaleString()}</span>
+      <span className="tabular-nums font-mono font-medium text-[#EDEDEF]">
+        {count.toLocaleString()}
+      </span>
       <span className="text-white/40 text-[11px]">Endorsements</span>
     </div>
   );
