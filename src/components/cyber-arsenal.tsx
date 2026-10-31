@@ -12,6 +12,13 @@ import {
   Radio,
   X,
   Sparkles,
+  Zap,
+  ShieldCheck,
+  Layers,
+  Cpu,
+  Copy,
+  Check,
+  Terminal,
 } from "lucide-react";
 import {
   TypeScriptIcon,
@@ -22,6 +29,7 @@ import {
   LinuxIcon,
 } from "@/components/tech-icons";
 import type { RepoItem, CommitItem } from "@/app/api/github/commits/route";
+import { getRepoSpecification } from "@/data/repo-specifications";
 
 const LANGUAGE_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
   TypeScript: TypeScriptIcon,
@@ -144,6 +152,7 @@ export function CyberArsenal() {
   const [selected, setSelected] = useState<RepoItem | null>(null);
   const [isClosing, setIsClosing] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [copiedClone, setCopiedClone] = useState(false);
   const titleId = useId();
 
   useEffect(() => {
@@ -177,8 +186,17 @@ export function CyberArsenal() {
     setIsClosing(true);
     setTimeout(() => {
       setSelected(null);
+      setCopiedClone(false);
       setIsClosing(false);
     }, 180);
+  };
+
+  const handleCopyClone = (e: React.MouseEvent, repoName: string) => {
+    e.stopPropagation();
+    const cmd = `git clone https://github.com/thoixinh335-hash/${repoName}.git`;
+    navigator.clipboard.writeText(cmd);
+    setCopiedClone(true);
+    setTimeout(() => setCopiedClone(false), 2000);
   };
 
   useEffect(() => {
@@ -211,7 +229,13 @@ export function CyberArsenal() {
     ? LANGUAGE_ICONS[selected.language] || FolderGit2
     : FolderGit2;
 
-  const selectedCommit = selected ? commitByRepo[selected.name] : null;
+  const selectedCommit = selected
+    ? commitByRepo[selected.name] || commitByRepo[selected.id] || commitByRepo[selected.fullName]
+    : null;
+
+  const spec = selected
+    ? getRepoSpecification(selected.name, selected.language, selected.description)
+    : null;
 
   return (
     <div>
@@ -310,13 +334,13 @@ export function CyberArsenal() {
           role="dialog"
           aria-modal="true"
           aria-labelledby={titleId}
-          className={`fixed inset-0 z-[9999] flex items-center justify-center p-4 overflow-y-auto bg-black/80 backdrop-blur-md transition-opacity duration-200 ${
+          className={`fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-4 overflow-y-auto bg-black/85 backdrop-blur-md transition-opacity duration-200 ${
             isClosing ? "opacity-0" : "opacity-100"
           }`}
           onClick={handleClose}
         >
           <div
-            className={`linear-card relative w-full max-w-lg my-auto p-6 border border-white/[0.12] rounded-2xl shadow-[0_20px_70px_rgba(0,0,0,0.8),0_0_30px_rgba(99,102,241,0.15)] bg-[#121215] transition-all duration-200 ${
+            className={`linear-card relative w-full max-w-2xl max-h-[90vh] overflow-y-auto custom-scrollbar my-auto p-5 sm:p-6 border border-white/[0.12] rounded-2xl shadow-[0_25px_80px_rgba(0,0,0,0.85),0_0_40px_rgba(99,102,241,0.18)] bg-[#121215] transition-all duration-200 ${
               isClosing
                 ? "opacity-0 scale-95 translate-y-3"
                 : "opacity-100 scale-100 translate-y-0"
@@ -326,19 +350,22 @@ export function CyberArsenal() {
             {/* Ambient Brand Color Bloom */}
             <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-2xl">
               <div
-                className="absolute -top-16 left-1/2 -translate-x-1/2 h-40 w-80 rounded-full blur-3xl opacity-35 transition-all duration-300"
+                className="absolute -top-20 left-1/2 -translate-x-1/2 h-44 w-96 rounded-full blur-3xl opacity-30 transition-all duration-300"
                 style={{ background: selectedColors.glow }}
               />
             </div>
 
             {/* Top Status Bar */}
             <div className="flex items-center justify-between border-b border-white/[0.08] pb-3 text-xs">
-              <div className="flex items-center gap-2">
-                <span className="size-2 rounded-full bg-indigo-500 shadow-[0_0_8px_rgba(99,102,241,1)]" />
-                <span className="font-sans font-semibold text-white text-xs">
+              <div className="flex items-center gap-2 flex-wrap min-w-0">
+                <span className="size-2 rounded-full bg-indigo-500 shadow-[0_0_8px_rgba(99,102,241,1)] animate-pulse shrink-0" />
+                <span className="font-sans font-semibold text-white text-xs shrink-0">
                   Repository Specification
                 </span>
-                <span className="rounded-md border border-white/[0.08] bg-white/[0.04] px-1.5 py-0.2 text-[10px] font-mono text-white/60">
+                <span className="rounded-md border border-indigo-500/30 bg-indigo-500/10 px-2 py-0.5 text-[10px] font-mono text-indigo-300 font-medium">
+                  {spec?.category || "FULL-STACK ARCHITECTURE"}
+                </span>
+                <span className="rounded-md border border-white/[0.08] bg-white/[0.04] px-1.5 py-0.5 text-[10px] font-mono text-white/60">
                   {selected.status}
                 </span>
               </div>
@@ -348,77 +375,131 @@ export function CyberArsenal() {
                 type="button"
                 onClick={handleClose}
                 aria-label="Close modal"
-                className="flex size-7 items-center justify-center rounded-lg border border-white/[0.08] bg-white/[0.03] text-white/60 hover:text-white hover:bg-white/[0.08] transition-colors cursor-pointer"
+                className="flex size-7 items-center justify-center rounded-lg border border-white/[0.08] bg-white/[0.03] text-white/60 hover:text-white hover:bg-white/[0.08] transition-colors cursor-pointer shrink-0 ml-2"
               >
                 <X className="size-4" />
               </button>
             </div>
 
             {/* Main Hero Identity Section */}
-            <div className="mt-4 flex items-start gap-4">
+            <div className="mt-4 flex items-start gap-3.5 sm:gap-4">
               {/* Language / Folder Logo in Reticle Box */}
               <div
-                className="relative flex size-14 shrink-0 items-center justify-center rounded-xl border bg-[#18191f] p-3 shadow-md"
+                className="relative flex size-13 sm:size-14 shrink-0 items-center justify-center rounded-xl border bg-[#18191f] p-3 shadow-md"
                 style={{ borderColor: selectedColors.border }}
               >
-                <SelectedIcon className="size-8 drop-shadow-sm" />
+                <SelectedIcon className="size-7 sm:size-8 drop-shadow-sm" />
               </div>
 
               {/* Title & Info */}
               <div className="min-w-0 flex-1">
                 <div className="flex flex-wrap items-center gap-2">
-                  <h3 id={titleId} className="font-sans text-xl font-bold text-white tracking-tight">
+                  <h3 id={titleId} className="font-sans text-lg sm:text-xl font-bold text-white tracking-tight">
                     {selected.name}
                   </h3>
                   <span className="rounded-md border border-white/[0.08] bg-white/[0.04] px-2 py-0.5 font-mono text-[10px] font-medium text-white/70">
                     {selected.language}
                   </span>
                 </div>
-                <p className="mt-1 font-mono text-xs text-white/40 truncate">
+                <p className="mt-0.5 font-mono text-xs text-white/40 truncate">
                   {selected.fullName}
                 </p>
-                <div className="mt-1.5 flex items-center gap-2 font-mono text-[10px] text-emerald-400">
-                  <span className="size-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.8)]" />
-                  <span>LIVE_REPOSITORY_SYNC</span>
-                </div>
+                {spec?.architecture && (
+                  <p className="mt-1 text-xs text-indigo-300 font-sans font-medium flex items-center gap-1.5">
+                    <Layers className="size-3 text-indigo-400 shrink-0" />
+                    <span className="truncate">{spec.architecture}</span>
+                  </p>
+                )}
               </div>
             </div>
 
-            {/* 3-Column Telemetry Bento Grid */}
-            <div className="mt-4 grid grid-cols-3 gap-2">
-              <div className="rounded-xl border border-white/[0.06] bg-[#16171b] p-3 text-center font-mono">
+            {/* 4-Column Telemetry Bento Grid */}
+            <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-2 font-mono">
+              <div className="rounded-xl border border-white/[0.06] bg-[#16171b] p-2.5 text-center">
                 <div className="text-[10px] text-white/40 font-semibold uppercase">STARS</div>
-                <div className="mt-0.5 text-lg font-bold text-amber-400 tabular-nums flex items-center justify-center gap-1">
-                  <Star className="size-3.5 fill-amber-400" />
+                <div className="mt-0.5 text-base font-bold text-amber-400 tabular-nums flex items-center justify-center gap-1">
+                  <Star className="size-3 fill-amber-400" />
                   <span>{selected.stars}</span>
                 </div>
-                <div className="mt-1 text-[9px] text-white/40">GITHUB RATING</div>
+                <div className="mt-0.5 text-[9px] text-white/40">GITHUB RATING</div>
               </div>
 
-              <div className="rounded-xl border border-white/[0.06] bg-[#16171b] p-3 text-center font-mono">
+              <div className="rounded-xl border border-white/[0.06] bg-[#16171b] p-2.5 text-center">
                 <div className="text-[10px] text-white/40 font-semibold uppercase">FORKS</div>
-                <div className="mt-0.5 text-lg font-bold text-indigo-300 tabular-nums flex items-center justify-center gap-1">
-                  <GitFork className="size-3.5" />
+                <div className="mt-0.5 text-base font-bold text-indigo-300 tabular-nums flex items-center justify-center gap-1">
+                  <GitFork className="size-3" />
                   <span>{selected.forks}</span>
                 </div>
-                <div className="mt-1 text-[9px] text-white/40">COMMUNITY</div>
+                <div className="mt-0.5 text-[9px] text-white/40">COMMUNITY</div>
               </div>
 
-              <div className="rounded-xl border border-white/[0.06] bg-[#16171b] p-3 text-center font-mono">
-                <div className="text-[10px] text-white/40 font-semibold uppercase">RUNTIME</div>
-                <div className="mt-0.5 text-lg font-bold text-cyan-400 truncate">
+              <div className="rounded-xl border border-white/[0.06] bg-[#16171b] p-2.5 text-center">
+                <div className="text-[10px] text-white/40 font-semibold uppercase">ENGINE</div>
+                <div className="mt-0.5 text-xs font-bold text-cyan-400 truncate" title={spec?.engine || selected.language}>
                   {selected.language}
                 </div>
-                <div className="mt-1 text-[9px] text-white/40">VERIFIED</div>
+                <div className="mt-0.5 text-[9px] text-white/40 truncate">RUNTIME</div>
+              </div>
+
+              <div className="rounded-xl border border-white/[0.06] bg-[#16171b] p-2.5 text-center">
+                <div className="text-[10px] text-white/40 font-semibold uppercase">STATUS</div>
+                <div className="mt-0.5 text-xs font-bold text-emerald-400 truncate flex items-center justify-center gap-1">
+                  <span className="size-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  <span>{selected.status}</span>
+                </div>
+                <div className="mt-0.5 text-[9px] text-white/40">LIFECYCLE</div>
               </div>
             </div>
 
-            {/* Technical Description */}
-            <div className="mt-3.5 rounded-xl border border-white/[0.06] bg-[#16171b] p-3.5 text-xs leading-relaxed text-[#EDEDEF]/85 font-sans">
-              <div className="font-mono text-[10px] font-semibold uppercase text-indigo-400 mb-1">
-                // PROJECT ARCHITECTURE & PURPOSE
+            {/* Tech Stack & Architecture Tags */}
+            {spec && spec.tags.length > 0 && (
+              <div className="mt-3 flex flex-wrap items-center gap-1.5">
+                {spec.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="inline-flex items-center rounded-lg border border-white/[0.08] bg-white/[0.03] px-2 py-0.5 font-mono text-[10px] font-medium text-white/70 hover:border-indigo-400/30 hover:text-white transition-colors"
+                  >
+                    {tag}
+                  </span>
+                ))}
               </div>
-              <p>{selected.description}</p>
+            )}
+
+            {/* Core Architectural Capabilities Bento */}
+            {spec && spec.highlights.length > 0 && (
+              <div className="mt-3.5 space-y-2">
+                <div className="font-mono text-[10px] font-semibold uppercase text-indigo-400 flex items-center gap-1.5">
+                  <Zap className="size-3 text-indigo-400" />
+                  <span>// CORE CAPABILITIES & HIGHLIGHTS</span>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                  {spec.highlights.map((h, idx) => (
+                    <div
+                      key={idx}
+                      className="rounded-xl border border-white/[0.06] bg-[#16171b] p-3 text-left transition-all hover:border-white/[0.12]"
+                    >
+                      <div className="font-sans text-xs font-semibold text-white/90 flex items-center gap-1.5 mb-1">
+                        <span className="size-1.5 rounded-full bg-indigo-400 shrink-0" />
+                        <span className="truncate">{h.title}</span>
+                      </div>
+                      <p className="font-sans text-[11px] leading-relaxed text-white/60">
+                        {h.description}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* System Specification & Workflow (Deep Dive) */}
+            <div className="mt-3.5 rounded-xl border border-white/[0.06] bg-[#16171b] p-3.5 text-xs leading-relaxed text-[#EDEDEF]/85 font-sans">
+              <div className="font-mono text-[10px] font-semibold uppercase text-indigo-400 mb-1.5 flex items-center gap-1.5">
+                <Cpu className="size-3 text-indigo-400" />
+                <span>// ARCHITECTURAL DESIGN & WORKFLOW</span>
+              </div>
+              <p className="text-white/80 leading-relaxed font-sans text-xs">
+                {spec?.deepDive || selected.description}
+              </p>
             </div>
 
             {/* Latest Commit Snippet (if available) */}
@@ -435,7 +516,10 @@ export function CyberArsenal() {
                     <GitCommit className="size-3" />
                     LATEST COMMIT
                   </span>
-                  <span className="tabular-nums group-hover:text-white/60 transition-colors">{selectedCommit.timeAgo}</span>
+                  <div className="flex items-center gap-1.5">
+                    <span className="tabular-nums group-hover:text-white/60 transition-colors">{selectedCommit.timeAgo}</span>
+                    <ExternalLink className="size-2.5 text-white/40 group-hover:text-indigo-300 transition-colors" />
+                  </div>
                 </div>
                 <p className="text-white/90 truncate font-sans group-hover:text-white transition-colors">
                   <span className="text-indigo-300 font-mono font-semibold">[{selectedCommit.sha}]</span>{" "}
@@ -444,8 +528,37 @@ export function CyberArsenal() {
               </a>
             )}
 
+            {/* Git Quick Clone Bar */}
+            <div className="mt-3 flex items-center justify-between rounded-xl border border-white/[0.06] bg-black/50 px-3 py-2 font-mono text-xs">
+              <div className="flex items-center gap-2 min-w-0 flex-1 mr-2">
+                <Terminal className="size-3.5 text-indigo-400 shrink-0" />
+                <span className="text-white/40 select-none text-[11px]">$</span>
+                <span className="text-white/80 truncate text-[11px]">
+                  git clone https://github.com/thoixinh335-hash/{selected.name}.git
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={(e) => handleCopyClone(e, selected.name)}
+                className="inline-flex items-center gap-1 rounded-lg border border-white/[0.08] bg-white/[0.04] px-2 py-1 text-[10.5px] font-sans font-medium text-white/70 hover:bg-white/[0.08] hover:text-white transition-colors cursor-pointer shrink-0"
+                title="Copy git clone command"
+              >
+                {copiedClone ? (
+                  <>
+                    <Check className="size-3 text-emerald-400" />
+                    <span className="text-emerald-400 text-[10px]">Copied</span>
+                  </>
+                ) : (
+                  <>
+                    <Copy className="size-3" />
+                    <span className="text-[10px]">Copy</span>
+                  </>
+                )}
+              </button>
+            </div>
+
             {/* Action Bar */}
-            <div className="mt-5 flex items-center justify-between border-t border-white/[0.08] pt-4">
+            <div className="mt-4 flex items-center justify-between border-t border-white/[0.08] pt-3.5">
               <a
                 href={selected.url}
                 target="_blank"
