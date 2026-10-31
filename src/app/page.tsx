@@ -164,7 +164,7 @@ export default function Home() {
           <div className="flex items-center gap-3">
             <div className="relative size-11 shrink-0 rounded-full overflow-hidden border border-white/10 bg-black">
               <Image
-                src="https://avatars.githubusercontent.com/u/264090890?v=4"
+                src="/darkwy-avatar.jpg"
                 alt="darkwy avatar"
                 fill
                 sizes="44px"

@@ -106,7 +106,7 @@ export function EnterScreen({ onEnter }: EnterScreenProps) {
         <div className="relative mb-4 flex items-center justify-center">
           <div className="relative size-18 sm:size-20 rounded-full overflow-hidden border border-white/10 bg-[#121215] shadow-[0_4px_24px_rgba(0,0,0,0.8)] transition-transform duration-300 hover:scale-105">
             <Image
-              src="https://avatars.githubusercontent.com/u/264090890?v=4"
+              src="/darkwy-avatar.jpg"
               alt="darkwy avatar"
               fill
               sizes="80px"
