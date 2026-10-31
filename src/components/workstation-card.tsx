@@ -9,7 +9,6 @@ import {
 } from "@/components/tech-icons";
 import {
   Terminal as TerminalIcon,
-  Layers,
   Cpu,
   ChevronDown,
   Sparkles,
@@ -96,13 +95,6 @@ const WORKSTATION_ITEMS = [
     Icon: TerminalIcon,
     brandColor: "#10B981",
     glowColor: "rgba(16, 185, 129, 0.7)",
-  },
-  {
-    name: "Next.js 16 • Go Fiber",
-    role: "Runtime Stack Engine",
-    Icon: Layers,
-    brandColor: "#00ADD8",
-    glowColor: "rgba(0, 173, 216, 0.7)",
   },
 ];
 
