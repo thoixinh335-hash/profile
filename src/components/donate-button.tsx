@@ -115,7 +115,7 @@ export function DonateButton() {
                     0334066961
                   </div>
                   <div className="text-[11px] text-[#8A8F98]">
-                    Chủ tài khoản: <span className="text-[#EDEDEF] font-medium">DO DUC HUY</span>
+                    Chủ tài khoản: <span className="text-[#EDEDEF] font-medium">LƯU ĐỨC HUY</span>
                   </div>
                 </div>
 
