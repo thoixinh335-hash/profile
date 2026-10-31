@@ -435,20 +435,6 @@ export function CyberArsenal() {
               </div>
             )}
 
-            {/* Tech Tags */}
-            {spec && spec.tags.length > 0 && (
-              <div className="mt-2.5 flex flex-wrap items-center gap-1">
-                {spec.tags.slice(0, 6).map((tag) => (
-                  <span
-                    key={tag}
-                    className="inline-flex items-center rounded-md border border-white/[0.08] bg-white/[0.03] px-1.5 py-0.5 font-mono text-[9.5px] font-medium text-white/60"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            )}
-
             {/* Latest Commit (Compact 1-line) */}
             {selectedCommit && (
               <a
