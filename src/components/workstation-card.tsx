@@ -6,6 +6,7 @@ import {
   BrowserIcon,
   KaliLinuxIcon,
   ArduinoIcon,
+  GhidraIcon,
 } from "@/components/tech-icons";
 import {
   Terminal as TerminalIcon,
@@ -88,6 +89,13 @@ const WORKSTATION_ITEMS = [
     Icon: ArduinoIcon,
     brandColor: "#00979D",
     glowColor: "rgba(0, 151, 157, 0.7)",
+  },
+  {
+    name: "Ghidra",
+    role: "Reverse Engineering",
+    Icon: GhidraIcon,
+    brandColor: "#E1251B",
+    glowColor: "rgba(225, 37, 27, 0.7)",
   },
   {
     name: "Kali Terminal • zsh",
