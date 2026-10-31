@@ -61,6 +61,51 @@ const MILESTONES = [
   },
 ];
 
+const WORKSTATION_ITEMS = [
+  {
+    name: "VS Code",
+    role: "Editor",
+    Icon: VsCodeIcon,
+    brandColor: "#007ACC",
+    glowColor: "rgba(0, 122, 204, 0.7)",
+  },
+  {
+    name: "FireFox, Chrome",
+    role: "Browser",
+    Icon: BrowserIcon,
+    brandColor: "#FF7139",
+    glowColor: "rgba(255, 113, 57, 0.7)",
+  },
+  {
+    name: "Kali Linux 2024.4",
+    role: "Rolling Release • OS",
+    Icon: KaliLinuxIcon,
+    brandColor: "#2782F6",
+    glowColor: "rgba(39, 130, 246, 0.7)",
+  },
+  {
+    name: "Arduino",
+    role: "Hardware & Embedded",
+    Icon: ArduinoIcon,
+    brandColor: "#00979D",
+    glowColor: "rgba(0, 151, 157, 0.7)",
+  },
+  {
+    name: "Kali Terminal • zsh",
+    role: "CLI & Shell Environment",
+    Icon: TerminalIcon,
+    brandColor: "#10B981",
+    glowColor: "rgba(16, 185, 129, 0.7)",
+  },
+  {
+    name: "Next.js 16 • Go Fiber",
+    role: "Runtime Stack Engine",
+    Icon: Layers,
+    brandColor: "#00ADD8",
+    glowColor: "rgba(0, 173, 216, 0.7)",
+  },
+];
+
 export function WorkstationCard() {
   const [showMilestones, setShowMilestones] = useState(false);
 
@@ -77,83 +122,38 @@ export function WorkstationCard() {
 
         {/* 2-Column Luxury Minimalist Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-5 mt-6">
-          {/* 1. VS Code */}
-          <div className="flex items-center gap-3.5 group p-2 -m-2 rounded-xl transition-all duration-200 hover:bg-white/[0.02] cursor-default">
-            <div className="size-11 sm:size-12 rounded-xl bg-white/[0.03] border border-white/[0.08] flex items-center justify-center shrink-0 transition-all duration-300 group-hover:scale-105 group-hover:border-[#007ACC]/50 group-hover:bg-[#007ACC]/10 group-hover:shadow-[0_0_20px_rgba(0,122,204,0.3)]">
-              <VsCodeIcon className="size-6 sm:size-7 text-white/90 group-hover:text-[#007ACC] transition-all duration-300 group-hover:scale-110" />
-            </div>
-            <div>
-              <h4 className="font-semibold text-sm sm:text-base text-[#EDEDEF] group-hover:text-white transition-colors tracking-tight">
-                VS Code
-              </h4>
-              <p className="text-xs text-[#8A8F98]">Editor</p>
-            </div>
-          </div>
+          {WORKSTATION_ITEMS.map((item) => (
+            <div
+              key={item.name}
+              className="flex items-center gap-3.5 group p-2 -m-2 rounded-xl transition-all duration-200 hover:bg-white/[0.02] cursor-default"
+            >
+              {/* Borderless Icon Container (No box border) */}
+              <div className="size-11 sm:size-12 flex items-center justify-center shrink-0 relative transition-transform duration-300 group-hover:scale-110">
+                <div className="relative size-6 sm:size-7 flex items-center justify-center">
+                  {/* 1. Base Inactive Icon (0% Muted State) */}
+                  <item.Icon className="size-6 sm:size-7 text-white/40 transition-colors duration-300 group-hover:text-white/20" />
 
-          {/* 2. FireFox, Chrome */}
-          <div className="flex items-center gap-3.5 group p-2 -m-2 rounded-xl transition-all duration-200 hover:bg-white/[0.02] cursor-default">
-            <div className="size-11 sm:size-12 rounded-xl bg-white/[0.03] border border-white/[0.08] flex items-center justify-center shrink-0 transition-all duration-300 group-hover:scale-105 group-hover:border-[#FF7139]/50 group-hover:bg-[#FF7139]/10 group-hover:shadow-[0_0_20px_rgba(255,113,57,0.3)]">
-              <BrowserIcon className="size-6 sm:size-7 text-white/90 group-hover:text-[#FF7139] transition-all duration-300 group-hover:scale-110" />
-            </div>
-            <div>
-              <h4 className="font-semibold text-sm sm:text-base text-[#EDEDEF] group-hover:text-white transition-colors tracking-tight">
-                FireFox, Chrome
-              </h4>
-              <p className="text-xs text-[#8A8F98]">Browser</p>
-            </div>
-          </div>
+                  {/* 2. Loading Color Icon (0% -> 100% Clip-path Fill Animation) */}
+                  <div
+                    className="icon-load-fill absolute inset-0 flex items-center justify-center pointer-events-none"
+                    style={{
+                      color: item.brandColor,
+                      filter: `drop-shadow(0 0 10px ${item.glowColor})`,
+                    }}
+                  >
+                    <item.Icon className="size-6 sm:size-7" />
+                  </div>
+                </div>
+              </div>
 
-          {/* 3. Kali Linux 2024.4 */}
-          <div className="flex items-center gap-3.5 group p-2 -m-2 rounded-xl transition-all duration-200 hover:bg-white/[0.02] cursor-default">
-            <div className="size-11 sm:size-12 rounded-xl bg-white/[0.03] border border-white/[0.08] flex items-center justify-center shrink-0 transition-all duration-300 group-hover:scale-105 group-hover:border-[#2782F6]/50 group-hover:bg-[#2782F6]/10 group-hover:shadow-[0_0_24px_rgba(39,130,246,0.4)]">
-              <KaliLinuxIcon className="size-6 sm:size-7 text-white/90 group-hover:text-[#2782F6] transition-all duration-300 group-hover:scale-110 drop-shadow-[0_0_8px_rgba(39,130,246,0.3)]" />
+              <div>
+                <h4 className="font-semibold text-sm sm:text-base text-[#EDEDEF] group-hover:text-white transition-colors tracking-tight">
+                  {item.name}
+                </h4>
+                <p className="text-xs text-[#8A8F98]">{item.role}</p>
+              </div>
             </div>
-            <div>
-              <h4 className="font-semibold text-sm sm:text-base text-[#EDEDEF] group-hover:text-white transition-colors tracking-tight">
-                Kali Linux 2024.4
-              </h4>
-              <p className="text-xs text-[#8A8F98]">Rolling Release • OS</p>
-            </div>
-          </div>
-
-          {/* 4. Arduino */}
-          <div className="flex items-center gap-3.5 group p-2 -m-2 rounded-xl transition-all duration-200 hover:bg-white/[0.02] cursor-default">
-            <div className="size-11 sm:size-12 rounded-xl bg-white/[0.03] border border-white/[0.08] flex items-center justify-center shrink-0 transition-all duration-300 group-hover:scale-105 group-hover:border-[#00979D]/50 group-hover:bg-[#00979D]/10 group-hover:shadow-[0_0_20px_rgba(0,151,157,0.3)]">
-              <ArduinoIcon className="size-6 sm:size-7 text-white/90 group-hover:text-[#00979D] transition-all duration-300 group-hover:scale-110" />
-            </div>
-            <div>
-              <h4 className="font-semibold text-sm sm:text-base text-[#EDEDEF] group-hover:text-white transition-colors tracking-tight">
-                Arduino
-              </h4>
-              <p className="text-xs text-[#8A8F98]">Hardware & Embedded</p>
-            </div>
-          </div>
-
-          {/* 5. Terminal */}
-          <div className="flex items-center gap-3.5 group p-2 -m-2 rounded-xl transition-all duration-200 hover:bg-white/[0.02] cursor-default">
-            <div className="size-11 sm:size-12 rounded-xl bg-white/[0.03] border border-white/[0.08] flex items-center justify-center shrink-0 transition-all duration-300 group-hover:scale-105 group-hover:border-emerald-500/50 group-hover:bg-emerald-500/10 group-hover:shadow-[0_0_20px_rgba(16,185,129,0.3)]">
-              <TerminalIcon className="size-6 sm:size-7 text-white/90 group-hover:text-emerald-400 transition-all duration-300 group-hover:scale-110" />
-            </div>
-            <div>
-              <h4 className="font-semibold text-sm sm:text-base text-[#EDEDEF] group-hover:text-white transition-colors tracking-tight">
-                Kali Terminal • zsh
-              </h4>
-              <p className="text-xs text-[#8A8F98]">CLI & Shell Environment</p>
-            </div>
-          </div>
-
-          {/* 6. Runtime Stack */}
-          <div className="flex items-center gap-3.5 group p-2 -m-2 rounded-xl transition-all duration-200 hover:bg-white/[0.02] cursor-default">
-            <div className="size-11 sm:size-12 rounded-xl bg-white/[0.03] border border-white/[0.08] flex items-center justify-center shrink-0 transition-all duration-300 group-hover:scale-105 group-hover:border-[#00ADD8]/50 group-hover:bg-[#00ADD8]/10 group-hover:shadow-[0_0_20px_rgba(0,173,216,0.3)]">
-              <Layers className="size-6 sm:size-7 text-white/90 group-hover:text-[#00ADD8] transition-all duration-300 group-hover:scale-110" />
-            </div>
-            <div>
-              <h4 className="font-semibold text-sm sm:text-base text-[#EDEDEF] group-hover:text-white transition-colors tracking-tight">
-                Next.js 16 • Go Fiber
-              </h4>
-              <p className="text-xs text-[#8A8F98]">Runtime Stack Engine</p>
-            </div>
-          </div>
+          ))}
         </div>
 
         {/* Cloud Infrastructure Telemetry */}
