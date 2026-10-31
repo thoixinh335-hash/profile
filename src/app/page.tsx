@@ -153,14 +153,14 @@ export default function Home() {
 
       {/* Main Container */}
       <div
-        className={`relative z-10 mx-auto max-w-5xl px-4 sm:px-6 py-6 sm:py-14 transition-all duration-[950ms] ease-out ${
+        className={`relative z-10 mx-auto max-w-5xl w-full max-w-full overflow-x-hidden px-4 sm:px-6 py-6 sm:py-14 transition-all duration-[950ms] ease-out ${
           hasEntered
             ? "opacity-100 scale-100 blur-0"
             : "opacity-0 scale-[0.97] blur-md pointer-events-none"
         }`}
       >
         {/* ================= MOBILE PROFILE HEADER ================= */}
-        <div className="block md:hidden select-none mb-3 animate-entrance">
+        <div className="block md:hidden select-none mb-3 animate-entrance w-full max-w-full">
           <div className="flex items-center gap-3">
             <div className="relative size-11 shrink-0 rounded-full overflow-hidden border border-white/10 bg-black">
               <Image
@@ -195,8 +195,8 @@ export default function Home() {
         </div>
 
         {/* ================= FULL-PAGE STICKY MOBILE SEGMENTED TAB NAV ================= */}
-        <div className="sticky top-3 z-40 block md:hidden mb-5">
-          <nav className="flex items-center justify-between p-1 rounded-full bg-black/85 border border-white/[0.12] backdrop-blur-xl shadow-[0_8px_30px_rgba(0,0,0,0.8)]">
+        <div className="sticky top-3 z-40 block md:hidden mb-5 w-full max-w-full">
+          <nav className="flex items-center justify-between p-1 rounded-full bg-black/85 border border-white/[0.12] backdrop-blur-xl shadow-[0_8px_30px_rgba(0,0,0,0.8)] w-full">
             {[
               { id: "about" as const, label: "About" },
               { id: "setup" as const, label: "Setup" },
@@ -222,7 +222,7 @@ export default function Home() {
           </nav>
         </div>
 
-        <div className="flex flex-col md:flex-row items-start gap-6 lg:gap-12">
+        <div className="flex flex-col md:flex-row items-start gap-6 lg:gap-12 w-full max-w-full min-w-0">
           {/* ================= LEFT COLUMN (DESKTOP STICKY SIDEBAR) ================= */}
           <aside className="hidden md:block w-60 lg:w-68 shrink-0 md:sticky md:top-20 self-start space-y-6 select-none animate-entrance">
             {/* Name & Handle */}
@@ -292,7 +292,7 @@ export default function Home() {
           </aside>
 
           {/* ================= RIGHT COLUMN (FLOWING SECTIONS) ================= */}
-          <main className="flex-1 min-w-0 space-y-8 sm:space-y-10 w-full pb-4 sm:pb-6">
+          <main className="flex-1 min-w-0 space-y-8 sm:space-y-10 w-full max-w-full overflow-hidden pb-4 sm:pb-6">
             {/* SECTION 1: ABOUT */}
             <section
               id="about"

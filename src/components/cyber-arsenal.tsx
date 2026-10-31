@@ -238,14 +238,14 @@ export function CyberArsenal() {
     : null;
 
   return (
-    <div>
+    <div className="w-full max-w-full min-w-0">
       {/* Header Bar matching Core Engineering Stack */}
-      <div className="flex items-center justify-between mb-3.5">
-        <div className="flex items-center gap-2 font-sans text-xs sm:text-sm text-[#EDEDEF] font-semibold">
-          <FolderGit2 className="size-4 text-indigo-400" />
-          <span>Repositories & Open Source</span>
+      <div className="flex items-center justify-between mb-3.5 w-full min-w-0">
+        <div className="flex items-center gap-2 font-sans text-xs sm:text-sm text-[#EDEDEF] font-semibold min-w-0">
+          <FolderGit2 className="size-4 text-indigo-400 shrink-0" />
+          <span className="truncate">Repositories & Open Source</span>
         </div>
-        <div className="flex items-center gap-2 font-mono text-[10.5px] text-white/50">
+        <div className="flex items-center gap-2 font-mono text-[10.5px] text-white/50 shrink-0">
           <span className="hidden sm:inline">[Click chip for repo details]</span>
           <span className="text-emerald-400 font-medium inline-flex items-center gap-1">
             <span className="size-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.8)]" />
@@ -273,17 +273,17 @@ export function CyberArsenal() {
           target="_blank"
           rel="noreferrer"
           title={`View commit [${latestCommit.sha}] on GitHub (${latestCommit.repo})`}
-          className="group mb-3.5 flex items-center justify-between rounded-xl border border-indigo-500/20 bg-indigo-950/20 px-3 py-2 font-mono text-[11px] transition-all duration-150 hover:border-indigo-400/50 hover:bg-indigo-950/40 hover:shadow-[0_0_15px_rgba(99,102,241,0.2)] cursor-pointer active:scale-[0.99]"
+          className="group mb-3.5 flex items-center justify-between rounded-xl border border-indigo-500/20 bg-indigo-950/20 px-3 py-2 font-mono text-[11px] transition-all duration-150 hover:border-indigo-400/50 hover:bg-indigo-950/40 hover:shadow-[0_0_15px_rgba(99,102,241,0.2)] cursor-pointer active:scale-[0.99] w-full max-w-full overflow-hidden"
         >
-          <div className="flex items-center gap-2 min-w-0 flex-1">
+          <div className="flex items-center gap-2 min-w-0 flex-1 overflow-hidden">
             <span className="size-1.5 shrink-0 rounded-full bg-indigo-400 shadow-[0_0_6px_rgba(129,140,248,0.8)] animate-pulse" />
             <span className="font-semibold text-indigo-400 text-[10px] uppercase tracking-wider shrink-0">
               LATEST COMMIT:
             </span>
-            <span className="truncate text-white/90 group-hover:text-indigo-200 transition-colors">
+            <div className="min-w-0 flex-1 truncate text-white/90 group-hover:text-indigo-200 transition-colors">
               <span className="text-indigo-300 font-semibold">[{latestCommit.sha}]</span>{" "}
               <span className="text-white/80 font-sans font-medium">{latestCommit.message}</span>
-            </span>
+            </div>
           </div>
           <div className="flex items-center gap-1.5 shrink-0 ml-2">
             <span className="text-white/40 tabular-nums text-[10px] group-hover:text-white/60 transition-colors">
@@ -295,8 +295,8 @@ export function CyberArsenal() {
       )}
 
       {/* Interactive Repository Badges (Scrollable with Sleek Scrollbar when many repos) */}
-      <div className="relative">
-        <div className="max-h-[250px] sm:max-h-[275px] overflow-y-auto custom-scrollbar pr-1 sm:pr-1.5 flex flex-wrap content-start gap-2 sm:gap-2.5 pb-1">
+      <div className="relative w-full max-w-full">
+        <div className="max-h-[250px] sm:max-h-[275px] overflow-y-auto overflow-x-hidden custom-scrollbar pr-1 sm:pr-1.5 flex flex-wrap content-start gap-2 sm:gap-2.5 pb-1 w-full max-w-full">
           {repos.map((repo) => {
             const Icon = LANGUAGE_ICONS[repo.language] || FolderGit2;
 

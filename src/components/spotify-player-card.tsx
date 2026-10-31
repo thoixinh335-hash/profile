@@ -130,15 +130,15 @@ export function SpotifyPlayerCard() {
   };
 
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-black/40 p-4 backdrop-blur-md shadow-[0_4px_30px_rgba(0,0,0,0.5)] transition-all hover:border-white/15">
+    <div className="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-black/40 p-3.5 sm:p-4 backdrop-blur-md shadow-[0_4px_30px_rgba(0,0,0,0.5)] transition-all hover:border-white/15 w-full max-w-full min-w-0">
       {/* Background Ambient Glow */}
       <div className="absolute -top-12 -right-12 size-40 rounded-full bg-indigo-500/10 blur-3xl pointer-events-none" />
 
       {/* Top Track & Controls Bar */}
-      <div className="flex items-center justify-between gap-4">
+      <div className="flex items-center justify-between gap-2.5 sm:gap-4 w-full min-w-0">
         {/* Album Cover & Details */}
-        <div className="flex items-center gap-3.5 min-w-0 flex-1">
-          <div className="relative size-12 shrink-0 overflow-hidden rounded-xl border border-white/10 bg-black">
+        <div className="flex items-center gap-2.5 sm:gap-3.5 min-w-0 flex-1 overflow-hidden">
+          <div className="relative size-11 sm:size-12 shrink-0 overflow-hidden rounded-xl border border-white/10 bg-black">
             <Image
               src={albumCover}
               alt={songTitle}
@@ -155,12 +155,12 @@ export function SpotifyPlayerCard() {
             )}
           </div>
 
-          <div className="min-w-0 flex-1">
-            <div className="flex items-center gap-2">
-              <h4 className="font-semibold text-xs sm:text-sm text-[#EDEDEF] truncate">
+          <div className="min-w-0 flex-1 overflow-hidden">
+            <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
+              <h4 className="font-semibold text-xs sm:text-sm text-[#EDEDEF] truncate min-w-0 flex-1">
                 {songTitle}
               </h4>
-              <span className="hidden sm:inline-block text-[9px] font-mono text-white/30 border border-white/10 px-1.5 py-0.2 rounded-full tabular-nums">
+              <span className="hidden sm:inline-block text-[9px] font-mono text-white/30 border border-white/10 px-1.5 py-0.2 rounded-full tabular-nums shrink-0">
                 {trackIndex + 1}/{PLAYLIST.length}
               </span>
             </div>
@@ -169,12 +169,12 @@ export function SpotifyPlayerCard() {
             </p>
 
             {/* Micro Seekbar (Interactive) */}
-            <div className="mt-1.5 flex items-center gap-2 font-mono text-[9.5px] text-white/40">
-              <span className="tabular-nums">{formatTime(currentTime)}</span>
+            <div className="mt-1.5 flex items-center gap-1.5 sm:gap-2 font-mono text-[9px] sm:text-[9.5px] text-white/40 min-w-0 w-full">
+              <span className="tabular-nums shrink-0">{formatTime(currentTime)}</span>
               <div
                 ref={progressBarRef}
                 onClick={handleSeek}
-                className="relative h-1.5 flex-1 rounded-full bg-white/10 overflow-hidden cursor-pointer group/bar"
+                className="relative h-1.5 flex-1 min-w-0 rounded-full bg-white/10 overflow-hidden cursor-pointer group/bar"
                 title="Click to seek"
               >
                 <div
@@ -182,13 +182,13 @@ export function SpotifyPlayerCard() {
                   style={{ width: `${progressPercent}%` }}
                 />
               </div>
-              <span className="tabular-nums">{formatTime(duration)}</span>
+              <span className="tabular-nums shrink-0">{formatTime(duration)}</span>
             </div>
           </div>
         </div>
 
         {/* Media Controls */}
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
           <button
             onClick={handlePrev}
             className="text-white/40 hover:text-white transition-colors p-1"

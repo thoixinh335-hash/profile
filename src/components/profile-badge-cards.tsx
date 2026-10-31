@@ -135,7 +135,7 @@ export function ProfileBadgeCards() {
   const joinedMonth = joinedDate.toLocaleDateString("en-US", { month: "short" });
 
   return (
-    <div className="flex flex-col sm:flex-row items-stretch gap-3 w-full">
+    <div className="flex flex-col sm:flex-row items-stretch gap-3 w-full max-w-full min-w-0">
       {/* 1. DISCORD REAL-TIME LIVE CARD */}
       <a
         href="https://discord.com/users/819822563588964383"

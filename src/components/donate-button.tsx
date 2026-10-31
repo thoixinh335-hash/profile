@@ -39,7 +39,7 @@ export function DonateButton() {
   return (
     <>
       {/* Floating Sponsor / Coffee Pill */}
-      <div className="pointer-events-auto fixed bottom-5 z-40">
+      <div className="pointer-events-auto fixed bottom-5 left-4 sm:left-6 z-40">
         <button
           onClick={() => setOpen(true)}
           className="group flex items-center gap-2 rounded-full border border-white/[0.1] bg-[#121215]/90 px-4 py-2 text-xs font-sans font-medium text-[#EDEDEF] shadow-xl shadow-black/60 backdrop-blur-md transition-all duration-150 hover:border-indigo-500/50 hover:bg-[#18191f] hover:shadow-[0_0_24px_rgba(99,102,241,0.25)] active:scale-[0.98]"
