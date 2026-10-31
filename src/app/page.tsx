@@ -30,7 +30,7 @@ const SOCIAL_PILLS = [
   { href: "https://losinginterest.life/huyduc", Icon: GlobeIcon, label: "losinginterest.life" },
 ];
 
-type SectionId = "about" | "setup" | "skills" | "projects";
+type SectionId = "about" | "setup" | "skills";
 
 export default function Home() {
   const [hasEntered, setHasEntered] = useState(false);
@@ -44,27 +44,31 @@ export default function Home() {
       // Don't fight programmatic smooth-scrolling while user clicked a nav tab
       if (isManualScrollRef.current) return;
 
-      // 1. If user is scrolled near bottom of the page -> lock 'projects'
+      // 1. If user is near bottom of the page -> user is in skills & projects
       const scrollPosition = window.innerHeight + window.scrollY;
       const totalHeight = document.documentElement.scrollHeight;
-      if (scrollPosition >= totalHeight - 200) {
-        setActiveSection("projects");
+      if (scrollPosition >= totalHeight - 40) {
+        setActiveSection("skills");
         return;
       }
 
       // 2. Viewport-relative boundary detection from bottom to top
-      const threshold = window.innerWidth < 768 ? 140 : 180;
-      const sections: SectionId[] = ["projects", "skills", "setup", "about"];
+      const threshold = window.innerWidth < 768 ? 160 : 200;
 
-      for (const id of sections) {
-        const el = document.getElementById(id);
-        if (el) {
-          const rect = el.getBoundingClientRect();
-          if (rect.top <= threshold) {
-            setActiveSection(id);
-            return;
-          }
-        }
+      const elProjects = document.getElementById("projects");
+      const elSkills = document.getElementById("skills");
+      if (
+        (elProjects && elProjects.getBoundingClientRect().top <= threshold) ||
+        (elSkills && elSkills.getBoundingClientRect().top <= threshold)
+      ) {
+        setActiveSection("skills");
+        return;
+      }
+
+      const elSetup = document.getElementById("setup");
+      if (elSetup && elSetup.getBoundingClientRect().top <= threshold) {
+        setActiveSection("setup");
+        return;
       }
 
       setActiveSection("about");
@@ -108,10 +112,14 @@ export default function Home() {
   // Jump to hash section if present in URL on mount
   useEffect(() => {
     if (typeof window !== "undefined" && window.location.hash) {
-      const hash = window.location.hash.replace("#", "") as SectionId;
-      if (["about", "setup", "skills", "projects"].includes(hash)) {
+      const hash = window.location.hash.replace("#", "");
+      if (hash === "skills" || hash === "projects") {
         setTimeout(() => {
-          scrollToSection(hash);
+          scrollToSection("skills");
+        }, 200);
+      } else if (hash === "about" || hash === "setup") {
+        setTimeout(() => {
+          scrollToSection(hash as SectionId);
         }, 200);
       }
     }
@@ -190,8 +198,7 @@ export default function Home() {
             {[
               { id: "about" as const, label: "About" },
               { id: "setup" as const, label: "Setup" },
-              { id: "skills" as const, label: "Skills" },
-              { id: "projects" as const, label: "Projects" },
+              { id: "skills" as const, label: "Skills & Projects" },
             ].map(({ id, label }) => {
               const isActive = activeSection === id;
               return (
@@ -237,13 +244,12 @@ export default function Home() {
               </p>
             </div>
 
-            {/* Vertical Navigation (— ABOUT, — SETUP, — SKILLS, — PROJECTS) with Silky Morph Indicator */}
+            {/* Vertical Navigation (— ABOUT, — SETUP, — SKILLS & PROJECTS) with Silky Morph Indicator */}
             <nav className="space-y-2.5 pt-1">
               {[
                 { id: "about" as const, label: "ABOUT" },
                 { id: "setup" as const, label: "SETUP" },
-                { id: "skills" as const, label: "SKILLS" },
-                { id: "projects" as const, label: "PROJECTS" },
+                { id: "skills" as const, label: "SKILLS & PROJECTS" },
               ].map(({ id, label }) => {
                 const isActive = activeSection === id;
                 return (
