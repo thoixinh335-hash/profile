@@ -26,10 +26,10 @@ import { MapPin, Sparkles, ExternalLink, Activity } from "lucide-react";
 const DISCORD_ID = process.env.NEXT_PUBLIC_DISCORD_ID ?? "819822563588964383";
 
 const SOCIAL_PILLS = [
-  { href: "https://t.me/duchuyfast", Icon: TelegramIcon, label: "@duchuyfast" },
+  { href: "https://t.me/unknowaccount1999", Icon: TelegramIcon, label: "@unknowaccount1999" },
   { href: "https://discord.com/users/819822563588964383", Icon: DiscordIcon, label: "@huyduc.fastvault" },
   { href: "https://github.com/thoixinh335-hash", Icon: GithubIcon, label: "thoixinh335-hash" },
-  { href: "mailto:hello@zyo.lol", Icon: MailIcon, label: "hello@zyo.lol" },
+  { href: "mailto:thoixinh335@gmail.com", Icon: MailIcon, label: "thoixinh335@gmail.com" },
   { href: "https://losinginterest.life/huyduc", Icon: GlobeIcon, label: "losinginterest.life" },
 ];
 
