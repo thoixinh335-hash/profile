@@ -15,8 +15,6 @@ import { ViewCounter } from "@/components/view-counter";
 import { LanyardProvider } from "@/components/lanyard";
 import { VisitorTelemetry } from "@/components/visitor-telemetry";
 import {
-  GithubIcon,
-  DiscordIcon,
   TelegramIcon,
   MailIcon,
   GlobeIcon,
@@ -27,8 +25,6 @@ const DISCORD_ID = process.env.NEXT_PUBLIC_DISCORD_ID ?? "819822563588964383";
 
 const SOCIAL_PILLS = [
   { href: "https://t.me/unknowaccount1999", Icon: TelegramIcon, label: "@unknowaccount1999" },
-  { href: "https://discord.com/users/819822563588964383", Icon: DiscordIcon, label: "@huyduc.fastvault" },
-  { href: "https://github.com/thoixinh335-hash", Icon: GithubIcon, label: "thoixinh335-hash" },
   { href: "mailto:thoixinh335@gmail.com", Icon: MailIcon, label: "thoixinh335@gmail.com" },
   { href: "https://losinginterest.life/huyduc", Icon: GlobeIcon, label: "losinginterest.life" },
 ];
