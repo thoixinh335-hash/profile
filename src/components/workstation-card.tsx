@@ -148,34 +148,34 @@ export function WorkstationCard() {
           ))}
         </div>
 
-        {/* Cloud Infrastructure Telemetry */}
+        {/* Hardware & System Specifications */}
         <div className="mt-7 rounded-xl border border-white/[0.06] bg-white/[0.02] p-3.5">
           <div className="flex items-center justify-between mb-2.5">
             <div className="flex items-center gap-2">
               <Cpu className="size-3.5 text-indigo-400" />
-              <span className="text-xs font-medium text-[#EDEDEF]">Infrastructure Specs</span>
+              <span className="text-xs font-medium text-[#EDEDEF]">Cấu Hình Phần Cứng Máy</span>
             </div>
             <span className="font-mono text-[10px] text-emerald-400 flex items-center gap-1">
               <span className="size-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.8)]" />
-              node-01.darkwy.internal
+              Dell Inspiron 3493
             </span>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-mono">
             <div className="rounded-lg bg-black/30 border border-white/[0.04] p-2">
               <p className="text-[10px] text-white/40">CPU</p>
-              <p className="text-white font-medium truncate">AMD EPYC (8c)</p>
+              <p className="text-white font-medium truncate" title="Intel Core i5-1035G1 (4C/8T)">Intel i5-1035G1</p>
             </div>
             <div className="rounded-lg bg-black/30 border border-white/[0.04] p-2">
-              <p className="text-[10px] text-white/40">MEMORY</p>
-              <p className="text-white font-medium tabular-nums">1.8G / 16.0G</p>
+              <p className="text-[10px] text-white/40">RAM</p>
+              <p className="text-white font-medium tabular-nums">16.0 GB DDR4</p>
             </div>
             <div className="rounded-lg bg-black/30 border border-white/[0.04] p-2">
               <p className="text-[10px] text-white/40">STORAGE</p>
-              <p className="text-white font-medium tabular-nums">276G / 512G SSD</p>
+              <p className="text-white font-medium tabular-nums">256 GB NVMe</p>
             </div>
             <div className="rounded-lg bg-black/30 border border-white/[0.04] p-2">
-              <p className="text-[10px] text-white/40">NETWORK</p>
-              <p className="text-white font-medium">1 Gbps Fiber</p>
+              <p className="text-[10px] text-white/40">GPU</p>
+              <p className="text-white font-medium truncate" title="Intel Iris Plus Graphics G1">Iris Plus G1</p>
             </div>
           </div>
         </div>
