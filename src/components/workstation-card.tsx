@@ -7,6 +7,8 @@ import {
   KaliLinuxIcon,
   ArduinoIcon,
   GhidraIcon,
+  ClaudeIcon,
+  ChatGptIcon,
 } from "@/components/tech-icons";
 import {
   Terminal as TerminalIcon,
@@ -154,6 +156,55 @@ export function WorkstationCard() {
               </div>
             </div>
           ))}
+        </div>
+
+        {/* Frontier AI Co-intelligence Strip (Unified 1-Row Layout) */}
+        <div className="mt-5 rounded-xl border border-white/[0.06] bg-white/[0.02] p-3 sm:p-3.5">
+          <div className="flex items-center justify-between mb-2.5">
+            <div className="flex items-center gap-2">
+              <Sparkles className="size-3.5 text-amber-400" />
+              <span className="text-xs font-medium text-[#EDEDEF]">AI Intelligence & Copilots</span>
+            </div>
+            <span className="font-mono text-[10px] text-white/40">10x Engineering Velocity</span>
+          </div>
+
+          <div className="grid grid-cols-2 gap-2 sm:gap-3">
+            {/* Claude */}
+            <div className="flex items-center gap-2 sm:gap-3 p-2 rounded-lg bg-black/40 border border-white/[0.06] transition-all duration-200 hover:border-[#D97757]/40 hover:bg-[#D97757]/[0.04] group cursor-default">
+              <div className="size-7.5 sm:size-9 rounded-md bg-[#D97757]/10 border border-[#D97757]/20 flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-105 shadow-[0_0_12px_rgba(217,119,87,0.15)]">
+                <ClaudeIcon className="size-4 sm:size-5 text-[#D97757]" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-1.5">
+                  <h4 className="font-semibold text-xs sm:text-sm text-[#EDEDEF] group-hover:text-white transition-colors truncate">
+                    Claude
+                  </h4>
+                  <span className="text-[9px] font-mono px-1 py-0.2 rounded bg-[#D97757]/15 text-[#D97757] font-medium border border-[#D97757]/25 hidden sm:inline-block">
+                    3.7
+                  </span>
+                </div>
+                <p className="text-[10px] sm:text-[11px] text-[#8A8F98] truncate">Anthropic • Reasoning</p>
+              </div>
+            </div>
+
+            {/* ChatGPT */}
+            <div className="flex items-center gap-2 sm:gap-3 p-2 rounded-lg bg-black/40 border border-white/[0.06] transition-all duration-200 hover:border-[#10A37F]/40 hover:bg-[#10A37F]/[0.04] group cursor-default">
+              <div className="size-7.5 sm:size-9 rounded-md bg-[#10A37F]/10 border border-[#10A37F]/20 flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-105 shadow-[0_0_12px_rgba(16,163,127,0.15)]">
+                <ChatGptIcon className="size-4 sm:size-5 text-[#10A37F]" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-1.5">
+                  <h4 className="font-semibold text-xs sm:text-sm text-[#EDEDEF] group-hover:text-white transition-colors truncate">
+                    ChatGPT
+                  </h4>
+                  <span className="text-[9px] font-mono px-1 py-0.2 rounded bg-[#10A37F]/15 text-[#10A37F] font-medium border border-[#10A37F]/25 hidden sm:inline-block">
+                    4o
+                  </span>
+                </div>
+                <p className="text-[10px] sm:text-[11px] text-[#8A8F98] truncate">OpenAI • Copilot</p>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Hardware & System Specifications */}

@@ -138,9 +138,9 @@ export default function Home() {
       {/* Floating Ambient Music Audio Player */}
       <AmbientAudio />
 
-      {/* Top Banner (Clean Pill on Desktop) */}
+      {/* Top Banner (Clean Pill on Desktop Only) */}
       <div
-        className={`fixed top-5 left-1/2 -translate-x-1/2 z-40 hidden sm:flex items-center gap-2 rounded-full border border-white/[0.08] bg-black/60 px-4 py-1.5 backdrop-blur-md shadow-[0_4px_24px_rgba(0,0,0,0.5)] transition-all duration-[950ms] ease-out ${
+        className={`fixed top-5 left-1/2 -translate-x-1/2 z-40 hidden md:flex items-center gap-2 rounded-full border border-white/[0.08] bg-black/60 px-4 py-1.5 backdrop-blur-md shadow-[0_4px_24px_rgba(0,0,0,0.5)] transition-all duration-[950ms] ease-out ${
           hasEntered ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4 pointer-events-none"
         }`}
       >
