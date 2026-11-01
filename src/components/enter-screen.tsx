@@ -45,9 +45,17 @@ export function EnterScreen({ onEnter }: EnterScreenProps) {
     if (hasTriggeredRef.current) return;
     hasTriggeredRef.current = true;
 
-    // 1. Audio & haptics
-    playHapticBlip();
-    globalAudio.play();
+    // 1. Audio & haptics (Safely guarded for iOS Safari gesture policy)
+    try {
+      globalAudio.play();
+    } catch {
+      // Audio autoplay policy handled
+    }
+    try {
+      playHapticBlip();
+    } catch {
+      // AudioContext fallback
+    }
 
     // 2. Trigger sleek curtain split reveal
     setIsExiting(true);
@@ -75,10 +83,11 @@ export function EnterScreen({ onEnter }: EnterScreenProps) {
   return (
     <div
       onClick={handleEnter}
+      onTouchEnd={handleEnter}
       role="button"
       tabIndex={0}
       aria-label="Click anywhere to enter profile"
-      className="fixed inset-0 z-[100] flex items-center justify-center cursor-pointer select-none overflow-hidden"
+      className="fixed inset-0 z-[100] flex items-center justify-center cursor-pointer select-none overflow-hidden touch-manipulation"
     >
       {/* ================= UPPER CURTAIN FLAP (TRÊN) ================= */}
       <div

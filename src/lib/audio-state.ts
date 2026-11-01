@@ -80,7 +80,11 @@ class AudioState {
     const audio = this.getAudio();
     if (!audio) return false;
     try {
-      audio.volume = 0.05;
+      try {
+        audio.volume = 0.05;
+      } catch {
+        // iOS Safari read-only volume property
+      }
       await audio.play();
       this.isPlaying = true;
       this.notify();
@@ -93,7 +97,11 @@ class AudioState {
           return;
         }
         currentVol = Math.min(targetVol, currentVol + 0.03);
-        this.audio.volume = currentVol;
+        try {
+          if (this.audio) this.audio.volume = currentVol;
+        } catch {
+          // iOS Safari volume restriction
+        }
         if (currentVol >= targetVol) {
           clearInterval(interval);
         }

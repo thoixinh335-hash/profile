@@ -90,26 +90,34 @@ export function LanyardProvider({
       ws = new WebSocket("wss://api.lanyard.rest/socket");
 
       ws.onmessage = (event) => {
-        const msg = JSON.parse(event.data as string) as {
-          op: number;
-          t?: string;
-          d: LanyardPresence & { heartbeat_interval?: number };
-        };
+        try {
+          const msg = JSON.parse(event.data as string) as {
+            op: number;
+            t?: string;
+            d: LanyardPresence & { heartbeat_interval?: number };
+          };
 
-        if (msg.op === 1) {
-          ws?.send(
-            JSON.stringify({ op: 2, d: { subscribe_to_id: userId } }),
-          );
-          heartbeat = setInterval(() => {
-            ws?.send(JSON.stringify({ op: 3 }));
-          }, msg.d.heartbeat_interval ?? 30000);
-        }
+          if (msg.op === 1) {
+            ws?.send(
+              JSON.stringify({ op: 2, d: { subscribe_to_id: userId } }),
+            );
+            heartbeat = setInterval(() => {
+              try {
+                ws?.send(JSON.stringify({ op: 3 }));
+              } catch {
+                // Connection closing
+              }
+            }, msg.d.heartbeat_interval ?? 30000);
+          }
 
-        if (
-          msg.op === 0 &&
-          (msg.t === "INIT_STATE" || msg.t === "PRESENCE_UPDATE")
-        ) {
-          applyPresence(msg.d);
+          if (
+            msg.op === 0 &&
+            (msg.t === "INIT_STATE" || msg.t === "PRESENCE_UPDATE")
+          ) {
+            applyPresence(msg.d);
+          }
+        } catch (err) {
+          console.warn("Lanyard WebSocket error:", err);
         }
       };
 

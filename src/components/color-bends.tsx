@@ -194,11 +194,17 @@ export function ColorBends({
     const mesh = new THREE.Mesh(geometry, material);
     scene.add(mesh);
 
-    const renderer = new THREE.WebGLRenderer({
-      antialias: false,
-      powerPreference: 'high-performance',
-      alpha: true
-    });
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({
+        antialias: false,
+        powerPreference: 'default',
+        alpha: true
+      });
+    } catch (e) {
+      console.warn("WebGL not supported or disabled on this device:", e);
+      return;
+    }
     rendererRef.current = renderer;
     (renderer as any).outputColorSpace = (THREE as any).SRGBColorSpace;
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
@@ -243,8 +249,12 @@ export function ColorBends({
       const amt = Math.min(1, dt * pointerSmoothRef.current);
       cur.lerp(tgt, amt);
       (material.uniforms.uPointer.value as THREE.Vector2).copy(cur);
-      renderer.render(scene, camera);
-      rafRef.current = requestAnimationFrame(loop);
+      try {
+        renderer.render(scene, camera);
+        rafRef.current = requestAnimationFrame(loop);
+      } catch (err) {
+        console.warn("WebGL render error:", err);
+      }
     };
     rafRef.current = requestAnimationFrame(loop);
 

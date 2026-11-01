@@ -66,17 +66,15 @@ section[id] {
   }
 }
 
-/* Master Smooth Entrance & Reveal Animations */
+/* Master Smooth Entrance & Reveal Animations (Safari WebKit GPU Compositor Safe) */
 @keyframes smoothFadeInUp {
   0% {
     opacity: 0;
-    transform: translateY(18px);
-    filter: blur(4px);
+    transform: translateY(16px);
   }
   100% {
     opacity: 1;
     transform: translateY(0);
-    filter: blur(0);
   }
 }
 

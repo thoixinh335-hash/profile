@@ -31,23 +31,30 @@ export function ProfileBadgeCards() {
   const [timeStr, setTimeStr] = useState("");
   const [github, setGithub] = useState<GitHubProfile>(DEFAULT_GITHUB_PROFILE);
 
-  // 1. Clock Ticker
+  // 1. Clock Ticker (Safely formatted for Safari / WebKit Intl)
   useEffect(() => {
     const updateTime = () => {
-      const now = new Date();
-      const formatted = now.toLocaleTimeString("en-US", {
-        timeZone: "Asia/Ho_Chi_Minh",
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: true,
-      });
-      const day = now.toLocaleDateString("en-US", {
-        timeZone: "Asia/Ho_Chi_Minh",
-        weekday: "short",
-        month: "short",
-        day: "numeric",
-      });
-      setTimeStr(`${formatted} • ${day}`);
+      try {
+        const now = new Date();
+        const formatted = now.toLocaleTimeString("en-US", {
+          timeZone: "Asia/Ho_Chi_Minh",
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: true,
+        });
+        const day = now.toLocaleDateString("en-US", {
+          timeZone: "Asia/Ho_Chi_Minh",
+          weekday: "short",
+          month: "short",
+          day: "numeric",
+        });
+        setTimeStr(`${formatted} • ${day}`);
+      } catch {
+        const now = new Date();
+        const h = now.getHours().toString().padStart(2, "0");
+        const m = now.getMinutes().toString().padStart(2, "0");
+        setTimeStr(`${h}:${m} • Hanoi`);
+      }
     };
     updateTime();
     const interval = setInterval(updateTime, 1000);
@@ -85,17 +92,21 @@ export function ProfileBadgeCards() {
   // 2. If Discord avatar is null, compute official Discord default embed avatar (0-5)
   // 3. Fallback to /discord-avatar.png
   const getDiscordAvatarUrl = () => {
-    if (discordUser?.avatar) {
-      const isAnimated = discordUser.avatar.startsWith("a_");
-      const ext = isAnimated ? "gif" : "png";
-      return `https://cdn.discordapp.com/avatars/${discordUser.id}/${discordUser.avatar}.${ext}?size=256`;
-    }
-    if (discordUser?.id) {
-      if (discordUser.discriminator === "0" || !discordUser.discriminator) {
-        const index = Number((BigInt(discordUser.id) >> BigInt(22)) % BigInt(6));
-        return `https://cdn.discordapp.com/embed/avatars/${index}.png`;
+    try {
+      if (discordUser?.avatar) {
+        const isAnimated = discordUser.avatar.startsWith("a_");
+        const ext = isAnimated ? "gif" : "png";
+        return `https://cdn.discordapp.com/avatars/${discordUser.id}/${discordUser.avatar}.${ext}?size=256`;
       }
-      return `https://cdn.discordapp.com/embed/avatars/${Number(discordUser.discriminator) % 5}.png`;
+      if (discordUser?.id) {
+        if (discordUser.discriminator === "0" || !discordUser.discriminator) {
+          const index = Number((BigInt(discordUser.id) >> BigInt(22)) % BigInt(6));
+          return `https://cdn.discordapp.com/embed/avatars/${index}.png`;
+        }
+        return `https://cdn.discordapp.com/embed/avatars/${Number(discordUser.discriminator) % 5}.png`;
+      }
+    } catch {
+      // Safe fallback for older WebKit / Safari BigInt
     }
     return "/discord-avatar.png";
   };
@@ -129,10 +140,18 @@ export function ProfileBadgeCards() {
     ? "Online on Discord"
     : "shall give a fuck..";
 
-  // Format GitHub Join Date
-  const joinedDate = new Date(github.createdAt);
-  const joinedYear = joinedDate.getFullYear();
-  const joinedMonth = joinedDate.toLocaleDateString("en-US", { month: "short" });
+  // Format GitHub Join Date (Safely guarded against Safari RangeError)
+  let joinedYear = 2026;
+  let joinedMonth = "Feb";
+  try {
+    const joinedDate = new Date(github.createdAt);
+    if (!isNaN(joinedDate.getTime())) {
+      joinedYear = joinedDate.getFullYear();
+      joinedMonth = joinedDate.toLocaleDateString("en-US", { month: "short" });
+    }
+  } catch {
+    // Fallback to defaults
+  }
 
   return (
     <div className="flex flex-col sm:flex-row items-stretch gap-3 w-full max-w-full min-w-0">
